@@ -20,6 +20,7 @@ public class MainPage extends JFrame {
     private JButton curve;
     private JButton courseStructure;
     private JButton export;
+    private JButton deleteAssignment;
     private JSeparator separator;
 
     // Constructor
@@ -53,9 +54,10 @@ public class MainPage extends JFrame {
         apply = new JButton("Apply");
         addAssignment = new JButton("Add Assignment");
         studentManagement = new JButton("Student Management");
-        curve = new JButton("Curve grade");
+        curve = new JButton("Curve Grade");
         courseStructure = new JButton("Course Structure");
         export = new JButton("Export");
+        deleteAssignment = new JButton("Delete Assignment");
 
         separator = new JSeparator();
 
@@ -71,10 +73,11 @@ public class MainPage extends JFrame {
         sp.setBounds(50, 140, 650, 400);
         statistic.setBounds(200, 550, 700, 50);
         addAssignment.setBounds(750, 140, 200, 50);
-        courseStructure.setBounds(750, 220, 200, 50);
-        studentManagement.setBounds(750, 300, 200, 50);
-        curve.setBounds(750, 380, 200, 50);
-        export.setBounds(750, 460, 200, 50);
+        deleteAssignment.setBounds(750, 220, 200, 50);
+        courseStructure.setBounds(750, 300, 200, 50);
+        studentManagement.setBounds(750, 380, 200, 50);
+        curve.setBounds(750, 460, 200, 50);
+        export.setBounds(750, 540, 200, 50);
 
         // Create the panel to place the buttons on
         JPanel panel = new JPanel();
@@ -95,6 +98,7 @@ public class MainPage extends JFrame {
         panel.add(studentManagement);
         panel.add(apply);
         panel.add(export);
+        panel.add(deleteAssignment);
         panel.add(curve);
         panel.add(separator);
 
