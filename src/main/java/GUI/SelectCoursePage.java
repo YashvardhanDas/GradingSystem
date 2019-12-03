@@ -1,0 +1,178 @@
+package GUI;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+public class SelectCoursePage extends JFrame {
+
+    JPanel buttons = new JPanel();
+
+    static String[] course;
+    JLabel courseLabel = new JLabel("Course: ");
+    JLabel semesterLabel = new JLabel("Semester: ");
+
+
+    JButton enter = new JButton("Enter Course");
+    JButton templateManage = new JButton("Template Management");
+    JButton add = new JButton("Create New Course");
+    JButton logout = new JButton("Log out");
+
+    int getSelect = -1;
+
+    private static Map<String, List<String>> values;
+
+    public SelectCoursePage() {
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                values = new HashMap<>();
+
+                values.put("Fall 2019", Arrays.asList("CS591 P1", "CS 506"));
+                values.put("Spring 2019", Arrays.asList("CS 504", "CS 552", "CS 542"));
+                values.put("Fall 2018", Arrays.asList("CS 530", "CS 660", "CS 565"));
+
+                JComboBox<String> semesters = new JComboBox<>(values.keySet().toArray(new String[values.keySet().size()]));
+                semesters.setSelectedItem(null);
+                JComboBox<String> courses = new JComboBox<>(new DefaultComboBoxModel<>());
+
+                semesters.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String value = (String) semesters.getSelectedItem();
+                        List<String> secondValues = values.get(value);
+
+                        DefaultComboBoxModel model = (DefaultComboBoxModel) courses.getModel();
+                        model.removeAllElements();
+                        for (String s : secondValues) {
+                            model.addElement(s);
+                        }
+                    }
+                });
+
+                //JComboBox courses = new JComboBox();
+                courses.setPreferredSize(new Dimension(350, 30));
+                //JComboBox semesters = new JComboBox();
+                semesters.setPreferredSize(new Dimension(350, 30));
+                Container contentPane = getContentPane();
+
+                contentPane.setLayout(null);
+
+                logout.setForeground(Color.RED);
+
+//        courses.addItem("CS591 P1");
+//        courses.addItem("CS506");
+//
+//        semesters.addItem("Fall 2019");
+//        semesters.addItem("Spring 2019");
+
+
+
+//        String defaultMessage ="please select";
+//        ComboBoxEditor editor= courses.getEditor();
+//        courses.configureEditor(editor,defaultMessage);
+//        courses.setSelectedItem(null);
+//        courses.addItemListener(new ItemListener() {
+//            @Override
+//            public void itemStateChanged(ItemEvent e) {
+//                if (e.getStateChange() == ItemEvent.SELECTED) {
+//                    getSelect = courses.getSelectedIndex();
+//                }
+//            }
+//        });
+
+                semesterLabel.setBounds(50, 100, 70,30);
+                courseLabel.setBounds(50, 140, 70,  30);
+                semesters.setBounds(130, 100, 400, 30);
+                courses.setBounds(130, 140, 400, 30);
+
+                add(semesterLabel);
+                add(courseLabel);
+                add(semesters);
+                add(courses);
+
+//        add.addActionListener(this);
+//        enter.addActionListener(this);
+//        logout.addActionListener(this);
+//        delete.addActionListener(this);
+
+                buttons.setLayout(new GridLayout(4, 1));
+                buttons.add(enter);
+                buttons.add(templateManage);
+                buttons.add(add);
+                buttons.add(logout);
+                buttons.setBounds(200, 200, 200, 120);
+                contentPane.add(buttons);
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                setSize(640, 360);
+                setLocation(200, 100);
+                setTitle("Select Course");
+                setResizable(false);
+                setVisible(true);
+
+                logout.addActionListener(e -> {
+                    dispose();
+                    new LoginPage();
+                });
+
+                enter.addActionListener(e -> {
+                    new MainPage();
+                });
+
+                add.addActionListener(e -> {
+                    new AddCoursePage();
+                });
+            }
+        });
+
+    }
+
+
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        if (e.getSource() == add) {
+//            dispose();
+//            new Add_Class_UI(grading_system);
+//        } else if (e.getSource() == enter) {
+//            if (getSelect == -1){
+////                dispose();
+////                new Select_Course_UI(grading_system);
+//                JOptionPane.showMessageDialog(null,"Please select a course");
+//            }
+//            for (int i = 0; i < course.length; i++) {
+//                if (getSelect == i) {
+//                    dispose();
+//                    new GradeSheet_UI(grading_system,grading_system.getCourses().get(i));
+//                }
+//            }
+//        } else if (e.getSource() == logout) {
+//            dispose();
+//            new Grading_System_UI(grading_system);
+//        } else if (e.getSource() == delete){
+//            if (getSelect == -1){
+//                JOptionPane.showMessageDialog(null,"Please select a course");
+//            } else {
+//                int input = JOptionPane.showConfirmDialog(null, "Are you sure to delete this course?");
+//                if (input == JOptionPane.YES_OPTION){
+//                    grading_system.deleteCourse(getSelect);
+//                    dispose();
+//                    new Select_Course_UI(grading_system);
+//                } else {
+//                    dispose();
+//                    new Select_Course_UI(grading_system);
+//                }
+//            }
+//        }
+//    }
+    public static void main(String[] args) {
+        SelectCoursePage selectCoursePage = new SelectCoursePage();
+    }
+}
