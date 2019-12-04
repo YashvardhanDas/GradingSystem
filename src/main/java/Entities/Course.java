@@ -76,4 +76,9 @@ public class Course {
     public void setSemester(Semester semester) {
         this.semester = semester;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

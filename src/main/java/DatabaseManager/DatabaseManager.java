@@ -148,7 +148,7 @@ public class DatabaseManager {
         return result;
     }
 
-    public List<Semester> getSemester(){
+    public List<Semester> getAllSemester(){
         em.getTransaction().begin();
         Query q = em.createQuery("SELECT s FROM Semester s");
         List<Semester> result = (List<Semester>) q.getResultList();

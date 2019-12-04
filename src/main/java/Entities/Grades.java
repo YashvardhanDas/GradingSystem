@@ -16,6 +16,9 @@ public class Grades {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
+    private double grade=0;
+    private boolean graded=false;
+
     public Grades() {
     }
 
@@ -46,5 +49,21 @@ public class Grades {
 
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
+    }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
+    public boolean isGraded() {
+        return graded;
+    }
+
+    public void setGraded(boolean graded) {
+        this.graded = graded;
     }
 }

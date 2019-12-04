@@ -46,4 +46,9 @@ public class Category {
     public void setCategoryPercents(List<CategoryPercent> categoryPercents) {
         this.categoryPercents = categoryPercents;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

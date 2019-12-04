@@ -16,6 +16,7 @@ public abstract class Student {
     private String surname;
     private String buId;
     private String email;
+    boolean freezed=false;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade ={CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "course_id")
@@ -82,5 +83,26 @@ public abstract class Student {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public List<Grades> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<Grades> grades) {
+        this.grades = grades;
+    }
+
+    public boolean isFreezed() {
+        return freezed;
+    }
+
+    public void setFreezed(boolean freezed) {
+        this.freezed = freezed;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName()+" "+this.getSurname();
     }
 }

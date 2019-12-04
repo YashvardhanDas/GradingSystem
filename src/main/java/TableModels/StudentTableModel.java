@@ -9,6 +9,10 @@ public class StudentTableModel extends AbstractTableModel {
     private String[] columnNames={"name","surname","buId","Email"};
     private List<Student> students;
 
+    public StudentTableModel(List<Student> students){
+        this.students=students;
+    }
+
     @Override
     public int getRowCount() {
         return this.students.size();

@@ -46,4 +46,9 @@ public class Semester {
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
+
+    @Override
+    public String toString() {
+        return this.tag;
+    }
 }

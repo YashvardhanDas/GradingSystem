@@ -75,4 +75,9 @@ public class Template {
     public void setAssignPercent(String assignPercent) {
         this.assignPercent = assignPercent;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }
