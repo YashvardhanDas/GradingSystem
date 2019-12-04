@@ -69,6 +69,7 @@ public class AssignmentAdditionPage extends JFrame {
                 add(back);
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 setSize(700, 400);
+                setLocation(200, 100);
                 setTitle("Assignment Addtion");
                 setResizable(false);
                 setVisible(true);

@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.math.BigDecimal;
 
 public class MainPage extends JFrame {
     private JLabel className;
@@ -25,7 +26,6 @@ public class MainPage extends JFrame {
 
     // Constructor
     public MainPage() {
-
         className = new JLabel("CS 591P1 Fall 2019");
         Font labelFont1 = new Font(Font.DIALOG, Font.BOLD, 20);
         className.setFont(labelFont1);
@@ -123,6 +123,52 @@ public class MainPage extends JFrame {
             StudentManagePage studentManagePage = new StudentManagePage();
         });
 
+        deleteAssignment.addActionListener(e -> {
+            DeleteAssignmentPage deleteAssignmentPage = new DeleteAssignmentPage();
+        });
+
+        courseStructure.addActionListener(e -> {
+            CourseStructurePage courseStructurePage = new CourseStructurePage();
+        });
+
+        addAssignment.addActionListener(e -> {
+            AssignmentAdditionPage assignmentAdditionPage = new AssignmentAdditionPage();
+        });
+
+        curve.addActionListener(e -> {
+            String stringValue = JOptionPane.showInputDialog(this, "Curve value:");
+            if (!isNumeric(stringValue)) {
+                JOptionPane.showMessageDialog(null,
+                        "Input should be numbers!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                double doubleValue = Double.valueOf(stringValue);
+                System.out.println(stringValue);
+                System.out.println(doubleValue);
+//                    stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
+//                    //refresh the JTable
+//                    stockTable.repaint();
+//                    JOptionPane.showMessageDialog(null, "Success! " +
+//                            "Change the price to " + doubleValue);
+//
+//                    // update the price in database
+//                    Integer id = (Integer) stockTable.getValueAt(stockTable.getSelectedRow(), 0);
+//                    Shares share = db.findShares(id);
+//                    share.setSharePrice(doubleValue);
+//                    db.update(share);
+//                    db.updatePrivateShares(share);
+            }
+        });
+    }
+
+    private boolean isNumeric(String str) {
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public static void main(String[] args) {

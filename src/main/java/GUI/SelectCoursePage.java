@@ -130,6 +130,10 @@ public class SelectCoursePage extends JFrame {
                 add.addActionListener(e -> {
                     new AddCoursePage();
                 });
+
+                templateManage.addActionListener(e -> {
+                    TemplateManagementPage templateManagementPage = new TemplateManagementPage();
+                });
             }
         });
 
