@@ -173,4 +173,29 @@ public class DatabaseManager {
         return result;
     }
 
+    public void addStudent(Student stud){
+
+        for(CategoryPercent cp : stud.getCourse().getCategoryPercents()){
+            for(Assignment a: cp.getAssignments()){
+                Grades temp = new Grades(stud, a);
+                stud.getGrades().add(temp);
+            }
+        }
+        em.getTransaction().begin();
+        em.persist(stud);
+        em.flush();
+        em.getTransaction().commit();
+    }
+
+    public void addAssignment(Assignment assignment){
+        for (Student s: assignment.getCategoryPercent().getCourse().getStudents()) {
+            Grades temp = new Grades(s, assignment);
+            assignment.getGrades().add(temp);
+        }
+        em.getTransaction().begin();
+        em.persist(assignment);
+        em.flush();
+        em.getTransaction().commit();
+    }
+
 }

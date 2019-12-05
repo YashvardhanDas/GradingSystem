@@ -17,6 +17,7 @@ public abstract class Student {
     private String buId;
     private String email;
     boolean freezed=false;
+    String comment = "";
 
     @ManyToOne(fetch = FetchType.EAGER, cascade ={CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "course_id")
@@ -98,6 +99,14 @@ public abstract class Student {
 
     public void setFreezed(boolean freezed) {
         this.freezed = freezed;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override
