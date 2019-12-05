@@ -12,7 +12,7 @@ public class DatabaseManager {
     EntityManager em;
 
     public DatabaseManager(){
-        EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "MyEclipseLinkExample" );
+        EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "GradingSystemProvider" );
         this.em = emfactory.createEntityManager();
     }
 

@@ -9,6 +9,8 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String name;
+
     private double percent;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade ={CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
@@ -22,8 +24,9 @@ public class Assignment {
     public Assignment() {
     }
 
-    public Assignment(double percent, CategoryPercent categoryPercent) {
+    public Assignment(double percent,String name, CategoryPercent categoryPercent) {
         this.percent = percent;
+        this.name=name;
         this.categoryPercent = categoryPercent;
     }
 
@@ -59,5 +62,11 @@ public class Assignment {
         this.grades = grades;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

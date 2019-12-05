@@ -6,6 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="EclipseLink" />
         <datasource-mapping>
+          <factory-entry name="Entities" />
           <factory-entry name="MyEclipseLinkExample" />
           <factory-entry name="NewPersistenceUnit" value="e8627c84-3c4c-4b43-b62c-cdd6f0ab1ca8" />
         </datasource-mapping>

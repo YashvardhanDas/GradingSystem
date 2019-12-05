@@ -10,7 +10,7 @@ public class UndergraduateStudent extends Student{
         super();
     }
 
-    public UndergraduateStudent(String name, String surname, String buId, String email,Course course) {
-        super(name,surname,buId,email,course);
+    public UndergraduateStudent(String name, String surname, String buId, String email) {
+        super(name,surname,buId,email);
     }
 }
