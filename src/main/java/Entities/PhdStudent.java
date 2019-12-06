@@ -12,6 +12,8 @@ public class PhdStudent extends Student{
 
     public PhdStudent(String name, String surname, String buId, String email) {
         super(name,surname,buId,email);
-
+    }
+    public PhdStudent(String name, String surname, String buId, String email,Course course) {
+        super(name,surname,buId,email,course);
     }
 }

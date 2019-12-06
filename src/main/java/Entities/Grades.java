@@ -66,4 +66,9 @@ public class Grades {
     public void setGraded(boolean graded) {
         this.graded = graded;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(grade);
+    }
 }

@@ -1,8 +1,15 @@
 package GUI;
 
+import Entities.*;
+import TableModels.MainPageTableModel;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainPage extends JFrame {
     private JLabel className;
@@ -46,7 +53,111 @@ public class MainPage extends JFrame {
 
         notGradedBox = new JCheckBox("Not Graded");
 
-        table = new JTable();
+
+        // Test Data
+        Course cs591p1 = new Course("CS591 P1", null);
+
+        Student s1 = new GraduateStudent("Tian", "Gao", "U809", "gaotian@bu.edu");
+        Student s2 = new GraduateStudent("Xinyue", "Li", "U555", "xili33@bu.edu");
+        Student s3 = new GraduateStudent("Dou", "Bao", "U233", "doubao@bu.edu");
+
+        s1.setCourse(cs591p1);
+        s2.setCourse(cs591p1);
+        s3.setCourse(cs591p1);
+
+        List<Student> students = new LinkedList<>();
+        students.add(s1);
+        students.add(s2);
+        students.add(s3);
+
+        Category hw = new Category("Homework", null);
+        Category project = new Category("Project", null);
+        Category exam = new Category("Exam", null);
+
+        CategoryPercent hwThis  = new CategoryPercent(0.5, hw, cs591p1);
+        CategoryPercent projThis  = new CategoryPercent(0.3, project, cs591p1);
+        CategoryPercent examThis  = new CategoryPercent(0.2, exam, cs591p1);
+
+        Assignment hw1 = new Assignment(0.5,  "Homework1", hwThis);
+        Assignment hw2 = new Assignment(0.5,  "Homework2", hwThis);
+        Assignment project1 = new Assignment(1,  "Project1", projThis);
+        Assignment midterm = new Assignment(0.6,  "Midterm", examThis);
+        Assignment finalExam = new Assignment(0.5,  "Final Exam", examThis);
+
+        List<Assignment> homeworks = new LinkedList<>();
+        List<Assignment> projects = new LinkedList<>();
+        List<Assignment> exams = new LinkedList<>();
+        homeworks.add(hw1);
+        homeworks.add(hw2);
+        projects.add(project1);
+        exams.add(midterm);
+        exams.add(finalExam);
+        hwThis.setAssignments(homeworks);
+        projThis.setAssignments(projects);
+        examThis.setAssignments(exams);
+
+        List<CategoryPercent> categoryPercents = new LinkedList<>();
+        categoryPercents.add(hwThis);
+        categoryPercents.add(projThis);
+        categoryPercents.add(examThis);
+
+        cs591p1.setCategoryPercents(categoryPercents);
+
+        Grades hw1Grade  = new Grades();
+        hw1Grade.setAssignment(hw1);
+        hw1Grade.setGrade(95);
+        hw1Grade.setGraded(true);
+        Grades hw2Grade  = new Grades();
+        hw2Grade.setAssignment(hw2);
+        hw2Grade.setGrade(60);
+        hw2Grade.setGraded(true);
+        Grades proj1Grade  = new Grades();
+        proj1Grade.setAssignment(project1);
+        proj1Grade.setGrade(88);
+        proj1Grade.setGraded(true);
+        Grades midtermGrade  = new Grades();
+        midtermGrade.setAssignment(midterm);
+        midtermGrade.setGrade(100);
+        midtermGrade.setGraded(true);
+        Grades finalGrade  = new Grades();
+        finalGrade.setAssignment(finalExam);
+        finalGrade.setGrade(0);
+        finalGrade.setGraded(false);
+
+        List<Grades> grades = new LinkedList<>();
+        grades.add(hw1Grade);
+        grades.add(hw2Grade);
+        grades.add(proj1Grade);
+        grades.add(midtermGrade);
+        grades.add(finalGrade);
+
+        s1.setGrades(grades);
+        s2.setGrades(grades);
+        s3.setGrades(grades);
+
+        List<List<Object>> rowDataList = new LinkedList<>();
+        List<Object> a = new LinkedList<>();
+        for (Student s : students) {
+            List<Object> tmp = new LinkedList<>();
+            tmp.add(s);
+            for (Grades g : s.getGrades()) {
+                tmp.add(g);
+            }
+            rowDataList.add(tmp);
+        }
+        List<String> columnNames  = new LinkedList<>();
+        columnNames.add("Student Name");
+        for (CategoryPercent cp : cs591p1.getCategoryPercents()) {
+            for (Assignment assignment : cp.getAssignments()) {
+                columnNames.add(assignment.getName());
+                System.out.println(assignment.getName());
+            }
+        }
+
+        MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList);
+
+        table = new JTable(mainPageTableModel);
+
         table.setAutoCreateRowSorter(true);
         sp = new JScrollPane(table);
 
@@ -115,6 +226,33 @@ public class MainPage extends JFrame {
         // Turn it on
         setVisible(true);
 
+        apply.addActionListener(e -> {
+            if (notGradedBox.isSelected()) {
+                table = new JTable(mainPageTableModel){
+                    @Override
+                    public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+                        Component comp = super.prepareRenderer(renderer, row, col);
+                        Object value = getModel().getValueAt(row, col);
+                        if (value instanceof Grades) {
+                            if (!((Grades) value).isGraded()) {
+                                comp.setBackground(Color.RED);
+                                comp.setForeground(Color.WHITE);
+                            } else {
+                                comp.setBackground(Color.WHITE);
+                                comp.setForeground(Color.BLACK);
+                            }
+                        } else {
+                            comp.setBackground(Color.WHITE);
+                            comp.setForeground(Color.BLACK);
+                        }
+                        return comp;
+                    }
+                };
+                mainPageTableModel.fireTableDataChanged();
+
+            }
+        });
+
         back.addActionListener(e -> {
             dispose();
         });
@@ -137,14 +275,15 @@ public class MainPage extends JFrame {
 
         curve.addActionListener(e -> {
             String stringValue = JOptionPane.showInputDialog(this, "Curve value:");
-            if (!isNumeric(stringValue)) {
-                JOptionPane.showMessageDialog(null,
-                        "Input should be numbers!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                double doubleValue = Double.valueOf(stringValue);
-                System.out.println(stringValue);
-                System.out.println(doubleValue);
+            if (stringValue != null) {
+                if (!isNumeric(stringValue)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Input should be numbers!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    double doubleValue = Double.valueOf(stringValue);
+                    System.out.println(stringValue);
+                    System.out.println(doubleValue);
 //                    stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
 //                    //refresh the JTable
 //                    stockTable.repaint();
@@ -157,6 +296,7 @@ public class MainPage extends JFrame {
 //                    share.setSharePrice(doubleValue);
 //                    db.update(share);
 //                    db.updatePrivateShares(share);
+                }
             }
         });
     }

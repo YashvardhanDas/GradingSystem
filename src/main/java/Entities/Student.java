@@ -36,6 +36,12 @@ public abstract class Student {
         this.buId = buId;
         this.email = email;
     }
+    public Student(String name, String surname, String buId, String email,Course course) {
+        this.name = name;
+        this.surname = surname;
+        this.buId = buId;
+        this.email = email;
+    }
 
     public int getId() {
         return id;
