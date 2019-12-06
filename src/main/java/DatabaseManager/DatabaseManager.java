@@ -6,6 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 public class DatabaseManager {
@@ -199,21 +202,35 @@ public class DatabaseManager {
     }
 
     public void createCourseFromCsv(Course course, String csvPath){
+        em.getTransaction().begin();
         String line = "";
         String cvsSplitBy = ",";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        Student stud=null;
+        try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
 
             while ((line = br.readLine()) != null) {
 
                 // use comma as separator
                 String[] student = line.split(cvsSplitBy);
-
-
+                switch (student[4]){
+                    case "0":
+                        stud = new UndergraduateStudent(student[0],student[1],student[2],student[3],course);
+                        break;
+                    case "1":
+                        stud = new GraduateStudent(student[0],student[1],student[2],student[3],course);
+                        break;
+                    case "2":
+                        stud = new PhdStudent(student[0],student[1],student[2],student[3],course);
+                        break;
+                }
+                em.persist(stud);
+                em.flush();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        em.getTransaction().commit();
     }
 
 }
