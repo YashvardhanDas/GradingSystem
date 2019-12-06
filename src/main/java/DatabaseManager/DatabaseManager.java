@@ -198,4 +198,22 @@ public class DatabaseManager {
         em.getTransaction().commit();
     }
 
+    public void createCourseFromCsv(Course course, String csvPath){
+        String line = "";
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] student = line.split(cvsSplitBy);
+
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
