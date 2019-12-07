@@ -4,12 +4,16 @@ import Entities.*;
 import TableModels.MainPageTableModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class MainPage extends JFrame {
     private JLabel className;
@@ -30,6 +34,7 @@ public class MainPage extends JFrame {
     private JButton export;
     private JButton deleteAssignment;
     private JSeparator separator;
+    private int index;
 
     // Constructor
     public MainPage() {
@@ -145,17 +150,30 @@ public class MainPage extends JFrame {
             }
             rowDataList.add(tmp);
         }
+
         List<String> columnNames  = new LinkedList<>();
+        Map<String, List<Integer>> columnToIndex = new HashMap<>();
         columnNames.add("Student Name");
+        index = 0;
         for (CategoryPercent cp : cs591p1.getCategoryPercents()) {
+            String categoryName = cp.getCategory().getName();
             for (Assignment assignment : cp.getAssignments()) {
-                columnNames.add(assignment.getName());
-                System.out.println(assignment.getName());
+                String assignmentName = assignment.getName();
+                columnNames.add(assignmentName);
+                System.out.println(assignmentName);
+                index++;
+
+                if (!columnToIndex.containsKey(categoryName)) {
+                    columnToIndex.put(categoryName, new LinkedList<>());
+                }
+
+                columnToIndex.get(categoryName).add(index);
             }
         }
 
         MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList);
 
+        //table = new JTable(mainPageTableModel);
         table = new JTable(mainPageTableModel);
 
         table.setAutoCreateRowSorter(true);
@@ -227,30 +245,38 @@ public class MainPage extends JFrame {
         setVisible(true);
 
         apply.addActionListener(e -> {
+            System.out.println(notGradedBox.isSelected());
             if (notGradedBox.isSelected()) {
-                table = new JTable(mainPageTableModel){
-                    @Override
-                    public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
-                        Component comp = super.prepareRenderer(renderer, row, col);
-                        Object value = getModel().getValueAt(row, col);
-                        if (value instanceof Grades) {
-                            if (!((Grades) value).isGraded()) {
-                                comp.setBackground(Color.RED);
-                                comp.setForeground(Color.WHITE);
-                            } else {
-                                comp.setBackground(Color.WHITE);
-                                comp.setForeground(Color.BLACK);
-                            }
-                        } else {
-                            comp.setBackground(Color.WHITE);
-                            comp.setForeground(Color.BLACK);
-                        }
-                        return comp;
-                    }
-                };
-                mainPageTableModel.fireTableDataChanged();
-
+                table.setDefaultRenderer(Object.class, new CustomRenderer());
+            } else {
+                table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
             }
+
+            TableColumnModel tcm = table.getColumnModel();
+            for (int i = 1; i <= index; i++) {
+                tcm.getColumn(i).setMaxWidth(0);
+                tcm.getColumn(i).setMinWidth(0);
+                tcm.getColumn(i).setPreferredWidth(0);
+            }
+
+
+            String categoryToShow = (String) categoriesBox.getSelectedItem();
+            if (categoryToShow.equals("All")) {
+                for (int i = 1; i <= index; i++) {
+                    tcm.getColumn(i).setMaxWidth(2147483647);
+                    tcm.getColumn(i).setMinWidth(15);
+                    tcm.getColumn(i).setPreferredWidth(75);
+                }
+            } else {
+                for (int i : columnToIndex.get(categoryToShow)) {
+                    System.out.println(i);
+                    tcm.getColumn(i).setMaxWidth(2147483647);
+                    tcm.getColumn(i).setMinWidth(15);
+                    tcm.getColumn(i).setPreferredWidth(75);
+                }
+            }
+
+            table.repaint();
         });
 
         back.addActionListener(e -> {
@@ -309,6 +335,28 @@ public class MainPage extends JFrame {
             return false;
         }
         return true;
+    }
+
+    // change the background color if not graded
+    class CustomRenderer extends DefaultTableCellRenderer {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                       boolean hasFocus, int row, int column) {
+            Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (value instanceof Grades) {
+                if (!((Grades) value).isGraded()) {
+                    comp.setBackground(Color.RED);
+                    comp.setForeground(Color.WHITE);
+                } else {
+                    comp.setBackground(Color.WHITE);
+                    comp.setForeground(Color.BLACK);
+                }
+            } else {
+                comp.setBackground(Color.WHITE);
+                comp.setForeground(Color.BLACK);
+            }
+            return comp;
+
+        }
     }
 
     public static void main(String[] args) {

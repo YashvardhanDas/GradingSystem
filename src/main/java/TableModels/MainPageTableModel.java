@@ -26,7 +26,7 @@ public class MainPageTableModel extends AbstractTableModel {
         return students.get(0).size();
     }
 
-    public String getColumnName(int col){
+    public String getColumnName(int col) {
         return this.columnNames.get(col);
     }
 
