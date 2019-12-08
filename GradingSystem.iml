@@ -7,10 +7,11 @@
         <setting name="provider-name" value="EclipseLink" />
         <datasource-mapping>
           <factory-entry name="Entities" />
+          <factory-entry name="GradingSystemProvider" value="e8627c84-3c4c-4b43-b62c-cdd6f0ab1ca8" />
           <factory-entry name="MyEclipseLinkExample" />
           <factory-entry name="NewPersistenceUnit" value="e8627c84-3c4c-4b43-b62c-cdd6f0ab1ca8" />
         </datasource-mapping>
-        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/persistence.xml" />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>
   </component>
