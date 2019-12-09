@@ -23,7 +23,7 @@ public class MainPageTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return students.get(0).size();
+        return columnNames.size();
     }
 
     public String getColumnName(int col) {
