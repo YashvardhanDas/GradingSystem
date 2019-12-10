@@ -4,16 +4,21 @@ import Entities.*;
 import TableModels.MainPageTableModel;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.text.DecimalFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class MainPage extends JFrame {
     private JLabel className;
@@ -35,6 +40,13 @@ public class MainPage extends JFrame {
     private JButton deleteAssignment;
     private JSeparator separator;
     private int index;
+    private double sum = 0;
+    private double average = 0;
+    private double median = 0;
+    private double std = 0;
+    private int count = 0;
+    List<Double> gradeList = new LinkedList<>();
+    private List<Student> students;
 
     // Constructor
     public MainPage() {
@@ -140,29 +152,51 @@ public class MainPage extends JFrame {
         s2.setGrades(grades);
         s3.setGrades(grades);
 
-        List<List<Object>> rowDataList = new LinkedList<>();
-        List<Object> a = new LinkedList<>();
-        for (Student s : students) {
-            List<Object> tmp = new LinkedList<>();
-            tmp.add(s);
-            for (Grades g : s.getGrades()) {
-                tmp.add(g);
-            }
-            rowDataList.add(tmp);
-        }
+        this.students = students;
 
+
+        List<List<Object>> rowDataList = new LinkedList<>();
         List<String> columnNames  = new LinkedList<>();
         Map<String, List<Integer>> columnToIndex = new HashMap<>();
         columnNames.add("Student Name");
-        index = 0;
-        for (CategoryPercent cp : cs591p1.getCategoryPercents()) {
-            String categoryName = cp.getCategory().getName();
-            for (Assignment assignment : cp.getAssignments()) {
-                String assignmentName = assignment.getName();
-                columnNames.add(assignmentName);
-                System.out.println(assignmentName);
-                index++;
 
+
+        // if there is no student in the course, get the column from Course
+        if (students == null) {
+            index = 0;
+            for (CategoryPercent cp : cs591p1.getCategoryPercents()) {
+                String categoryName = cp.getCategory().getName();
+                for (Assignment assignment : cp.getAssignments()) {
+                    String assignmentName = assignment.getName();
+                    columnNames.add(assignmentName);
+                    System.out.println(assignmentName);
+                    index++;
+
+                    if (!columnToIndex.containsKey(categoryName)) {
+                        columnToIndex.put(categoryName, new LinkedList<>());
+                    }
+
+                    columnToIndex.get(categoryName).add(index);
+                }
+            }
+        } else {
+            updateStatistics();
+            index = 0;
+            for (Student s : students) {
+                List<Object> tmp = new LinkedList<>();
+                tmp.add(s);
+                for (Grades g : s.getGrades()) {
+                    tmp.add(g);
+                    //System.out.println(g.getAssignment().getName());
+
+                }
+                rowDataList.add(tmp);
+            }
+
+            for (Grades g : students.get(0).getGrades()) {
+                String categoryName = g.getAssignment().getCategoryPercent().getCategory().getName();
+                columnNames.add(g.getAssignment().getName());
+                index++;
                 if (!columnToIndex.containsKey(categoryName)) {
                     columnToIndex.put(categoryName, new LinkedList<>());
                 }
@@ -175,8 +209,12 @@ public class MainPage extends JFrame {
 
         //table = new JTable(mainPageTableModel);
         table = new JTable(mainPageTableModel);
-
         table.setAutoCreateRowSorter(true);
+        table.getModel().addTableModelListener(e -> {
+            System.out.println(e.getColumn());
+            System.out.println(e.getFirstRow());
+        });
+
         sp = new JScrollPane(table);
 
         back = new JButton("Back");
@@ -245,6 +283,9 @@ public class MainPage extends JFrame {
         setVisible(true);
 
         apply.addActionListener(e -> {
+            String categoryToShow = (String) categoriesBox.getSelectedItem();
+            updateStatistics();
+
             System.out.println(notGradedBox.isSelected());
             if (notGradedBox.isSelected()) {
                 table.setDefaultRenderer(Object.class, new CustomRenderer());
@@ -260,7 +301,6 @@ public class MainPage extends JFrame {
             }
 
 
-            String categoryToShow = (String) categoriesBox.getSelectedItem();
             if (categoryToShow.equals("All")) {
                 for (int i = 1; i <= index; i++) {
                     tcm.getColumn(i).setMaxWidth(2147483647);
@@ -310,6 +350,7 @@ public class MainPage extends JFrame {
                     double doubleValue = Double.valueOf(stringValue);
                     System.out.println(stringValue);
                     System.out.println(doubleValue);
+                    updateStatistics();
 //                    stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
 //                    //refresh the JTable
 //                    stockTable.repaint();
@@ -323,6 +364,36 @@ public class MainPage extends JFrame {
 //                    db.update(share);
 //                    db.updatePrivateShares(share);
                 }
+            }
+        });
+
+        statistic.addMouseListener(new MouseListener() {
+            String categoryToShow = (String) categoriesBox.getSelectedItem();
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("click");
+                updateStatistics();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("press");
+                updateStatistics();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("release");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                System.out.println("enter");
+                updateStatistics();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
             }
         });
     }
@@ -357,6 +428,53 @@ public class MainPage extends JFrame {
             return comp;
 
         }
+    }
+
+    private void updateStatistics() {
+        String categoryToShow = (String) categoriesBox.getSelectedItem();
+        double sum = 0;
+        double average = 0;
+        double median = 0;
+        double std = 0;
+        int count = 0;
+        List<Double> gradeList = new LinkedList<>();
+
+        if (students != null) {
+            // calculate statistics
+            for (Student s : students) {
+                if (!s.isFreezed()) {
+                    for (Grades g : s.getGrades()) {
+                        String categoryName = g.getAssignment().getCategoryPercent().getCategory().getName();
+                        if (categoryToShow.equals("All") || categoryToShow.equals(categoryName)) {
+                            gradeList.add(g.getGrade());
+                            count++;
+                            sum += g.getGrade();
+                        }
+                    }
+                }
+            }
+
+            if (count != 0) {
+                average = sum / count;
+                Collections.sort(gradeList);
+                median = gradeList.get(count / 2);
+                double tmpSum = 0;
+                for (Double g : gradeList) {
+                    tmpSum += Math.pow(g - average, 2);
+                }
+                std = Math.sqrt(tmpSum / count);
+            }
+        }
+
+        DecimalFormat df = new DecimalFormat("##.##");
+        String avgStr = df.format(average);
+        String medianStr = df.format(median);
+        String stdStr = df.format(std);
+        System.out.println(avgStr);
+        System.out.println(medianStr);
+        System.out.println(stdStr);
+        statistic.setText("Average: " +  avgStr + "  Median: " + medianStr + "  Standard Deviation: " + stdStr);
+        statistic.repaint();
     }
 
     public static void main(String[] args) {
