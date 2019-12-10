@@ -1,9 +1,13 @@
 package TableModels;
 
+import Entities.Grades;
 import Entities.Student;
 
+import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MainPageTableModel extends AbstractTableModel {
@@ -43,7 +47,37 @@ public class MainPageTableModel extends AbstractTableModel {
     }
 
     @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        if (columnIndex != 0) {
+            if (!isNumeric((String) aValue)) {
+                JOptionPane.showMessageDialog(null,
+                        "Input should be numbers!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                double doubleValue = Double.valueOf((String) aValue);
+                ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
+                ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);
+            }
+        }
+    }
+
+    @Override
     public void fireTableDataChanged() {
         super.fireTableDataChanged();
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columnIndex != 0;
+    }
+
+    private boolean isNumeric(String str) {
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

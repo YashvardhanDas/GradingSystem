@@ -4,11 +4,17 @@ import Entities.*;
 import TableModels.MainPageTableModel;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -40,6 +46,7 @@ public class MainPage extends JFrame {
     private double std = 0;
     private int count = 0;
     List<Double> gradeList = new LinkedList<>();
+    private List<Student> students;
 
     // Constructor
     public MainPage() {
@@ -145,6 +152,8 @@ public class MainPage extends JFrame {
         s2.setGrades(grades);
         s3.setGrades(grades);
 
+        this.students = students;
+
 
         List<List<Object>> rowDataList = new LinkedList<>();
         List<String> columnNames  = new LinkedList<>();
@@ -171,41 +180,18 @@ public class MainPage extends JFrame {
                 }
             }
         } else {
+            updateStatistics();
             index = 0;
             for (Student s : students) {
                 List<Object> tmp = new LinkedList<>();
                 tmp.add(s);
                 for (Grades g : s.getGrades()) {
                     tmp.add(g);
-                    System.out.println(g.getAssignment().getName());
-                    if (!s.isFreezed()) {
-                        gradeList.add(g.getGrade());
-                        count++;
-                        sum += g.getGrade();
-                    }
+                    //System.out.println(g.getAssignment().getName());
+
                 }
                 rowDataList.add(tmp);
             }
-
-            if (count != 0) {
-                average = sum / count;
-                Collections.sort(gradeList);
-                median = gradeList.get(count / 2);
-                double tmpSum = 0;
-                for (Double g : gradeList) {
-                    tmpSum += Math.pow(g - average, 2);
-                }
-                std = Math.sqrt(tmpSum / count);
-            }
-
-            DecimalFormat df = new DecimalFormat("##.##");
-            String avgStr = df.format(average);
-            String medianStr = df.format(median);
-            String stdStr = df.format(std);
-            System.out.println(avgStr);
-            System.out.println(medianStr);
-            System.out.println(stdStr);
-            statistic.setText("Average: " +  avgStr + "  Median: " + medianStr + "  Standard Deviation: " + stdStr);
 
             for (Grades g : students.get(0).getGrades()) {
                 String categoryName = g.getAssignment().getCategoryPercent().getCategory().getName();
@@ -223,8 +209,12 @@ public class MainPage extends JFrame {
 
         //table = new JTable(mainPageTableModel);
         table = new JTable(mainPageTableModel);
-
         table.setAutoCreateRowSorter(true);
+        table.getModel().addTableModelListener(e -> {
+            System.out.println(e.getColumn());
+            System.out.println(e.getFirstRow());
+        });
+
         sp = new JScrollPane(table);
 
         back = new JButton("Back");
@@ -294,49 +284,7 @@ public class MainPage extends JFrame {
 
         apply.addActionListener(e -> {
             String categoryToShow = (String) categoriesBox.getSelectedItem();
-            double sum = 0;
-            double average = 0;
-            double median = 0;
-            double std = 0;
-            int count = 0;
-            List<Double> gradeList = new LinkedList<>();
-
-            if (students != null) {
-                // calculate statistics
-                for (Student s : students) {
-                    if (!s.isFreezed()) {
-                        for (Grades g : s.getGrades()) {
-                            String categoryName = g.getAssignment().getCategoryPercent().getCategory().getName();
-                            if (categoryToShow.equals("All") || categoryToShow.equals(categoryName)) {
-                                gradeList.add(g.getGrade());
-                                count++;
-                                sum += g.getGrade();
-                            }
-                        }
-                    }
-                }
-
-                if (count != 0) {
-                    average = sum / count;
-                    Collections.sort(gradeList);
-                    median = gradeList.get(count / 2);
-                    double tmpSum = 0;
-                    for (Double g : gradeList) {
-                        tmpSum += Math.pow(g - average, 2);
-                    }
-                    std = Math.sqrt(tmpSum / count);
-                }
-            }
-
-            DecimalFormat df = new DecimalFormat("##.##");
-            String avgStr = df.format(average);
-            String medianStr = df.format(median);
-            String stdStr = df.format(std);
-            System.out.println(avgStr);
-            System.out.println(medianStr);
-            System.out.println(stdStr);
-            statistic.setText("Average: " +  avgStr + "  Median: " + medianStr + "  Standard Deviation: " + stdStr);
-            statistic.repaint();
+            updateStatistics();
 
             System.out.println(notGradedBox.isSelected());
             if (notGradedBox.isSelected()) {
@@ -402,6 +350,7 @@ public class MainPage extends JFrame {
                     double doubleValue = Double.valueOf(stringValue);
                     System.out.println(stringValue);
                     System.out.println(doubleValue);
+                    updateStatistics();
 //                    stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
 //                    //refresh the JTable
 //                    stockTable.repaint();
@@ -415,6 +364,36 @@ public class MainPage extends JFrame {
 //                    db.update(share);
 //                    db.updatePrivateShares(share);
                 }
+            }
+        });
+
+        statistic.addMouseListener(new MouseListener() {
+            String categoryToShow = (String) categoriesBox.getSelectedItem();
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("click");
+                updateStatistics();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("press");
+                updateStatistics();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("release");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                System.out.println("enter");
+                updateStatistics();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
             }
         });
     }
@@ -449,6 +428,53 @@ public class MainPage extends JFrame {
             return comp;
 
         }
+    }
+
+    private void updateStatistics() {
+        String categoryToShow = (String) categoriesBox.getSelectedItem();
+        double sum = 0;
+        double average = 0;
+        double median = 0;
+        double std = 0;
+        int count = 0;
+        List<Double> gradeList = new LinkedList<>();
+
+        if (students != null) {
+            // calculate statistics
+            for (Student s : students) {
+                if (!s.isFreezed()) {
+                    for (Grades g : s.getGrades()) {
+                        String categoryName = g.getAssignment().getCategoryPercent().getCategory().getName();
+                        if (categoryToShow.equals("All") || categoryToShow.equals(categoryName)) {
+                            gradeList.add(g.getGrade());
+                            count++;
+                            sum += g.getGrade();
+                        }
+                    }
+                }
+            }
+
+            if (count != 0) {
+                average = sum / count;
+                Collections.sort(gradeList);
+                median = gradeList.get(count / 2);
+                double tmpSum = 0;
+                for (Double g : gradeList) {
+                    tmpSum += Math.pow(g - average, 2);
+                }
+                std = Math.sqrt(tmpSum / count);
+            }
+        }
+
+        DecimalFormat df = new DecimalFormat("##.##");
+        String avgStr = df.format(average);
+        String medianStr = df.format(median);
+        String stdStr = df.format(std);
+        System.out.println(avgStr);
+        System.out.println(medianStr);
+        System.out.println(stdStr);
+        statistic.setText("Average: " +  avgStr + "  Median: " + medianStr + "  Standard Deviation: " + stdStr);
+        statistic.repaint();
     }
 
     public static void main(String[] args) {
