@@ -313,7 +313,7 @@ public class MainPage extends JFrame {
 //                    stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
 //                    //refresh the JTable
 //                    stockTable.repaint();
-//                    JOptionPane.showMessageDialog(null, "Success! " +
+//                    JOptionPane.showMessageDialk1og(null, "Success! " +
 //                            "Change the price to " + doubleValue);
 //
 //                    // update the price in database

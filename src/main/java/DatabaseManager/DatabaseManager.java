@@ -207,9 +207,7 @@ public class DatabaseManager {
         String cvsSplitBy = ",";
         Student stud=null;
         try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
-
             while ((line = br.readLine()) != null) {
-
                 // use comma as separator
                 String[] student = line.split(cvsSplitBy);
                 switch (student[4]){
@@ -233,4 +231,36 @@ public class DatabaseManager {
         em.getTransaction().commit();
     }
 
+    public void createTemplate(Course course, String name){
+        String categories = "{";
+        String catPercent = "{";
+        String assignNum = "{";
+        String assignPercent = "{";
+        for(int i =0; i<course.getCategoryPercents().size();i++){
+            categories+=course.getCategoryPercents().get(i).getCategory().getName();
+            catPercent+=course.getCategoryPercents().get(i).getPercent();
+            assignNum+=course.getCategoryPercents().get(i).getAssignments().size();
+            assignPercent+="{";
+            for(int j =0; j<course.getCategoryPercents().get(i).getAssignments().size();j++){
+                assignPercent+=course.getCategoryPercents().get(i).getAssignments().get(j).getPercent();
+                if(course.getCategoryPercents().get(i).getAssignments().size()== j+1){
+                    assignPercent+="}";
+                }else{
+                    assignPercent+=",";
+                }
+            }
+            if(course.getCategoryPercents().size()== i+1){
+                categories+="}";
+                catPercent+="}";
+                assignNum+="}";
+                assignPercent+="}";
+            }else{
+                categories+=",";
+                catPercent+=",";
+                assignNum+=",";
+                assignPercent+=",";
+            }
+        }
+        System.out.println(categories+"     "+catPercent+"     "+assignNum+"     "+assignPercent);
+    }
 }

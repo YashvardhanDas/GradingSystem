@@ -1,6 +1,7 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,6 +42,8 @@ public abstract class Student {
         this.surname = surname;
         this.buId = buId;
         this.email = email;
+        this.course=course;
+        this.grades=new ArrayList<Grades>();
     }
 
     public int getId() {

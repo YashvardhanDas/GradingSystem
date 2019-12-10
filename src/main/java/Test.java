@@ -1,5 +1,6 @@
 import DatabaseManager.DatabaseManager;
 import Entities.*;
+import com.google.gson.Gson;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,40 +10,8 @@ public class Test {
     public static void main(String[] args) {
         DatabaseManager db = new DatabaseManager();
 //         Test Data
-        Course cs591p1 = new Course("CS591 P1", null);
-        db.add(cs591p1);
-        Category hw = new Category("Homework");
-        db.add(hw);
-        Category project = new Category("Project");
-        db.add(project);
-        Category exam = new Category("Exam");
-        db.add(exam);
-
-        CategoryPercent hwThis  = new CategoryPercent(0.5, hw, cs591p1);
-        db.add(hwThis);
-        CategoryPercent projThis  = new CategoryPercent(0.3, project, cs591p1);
-        db.add(projThis);
-        CategoryPercent examThis  = new CategoryPercent(0.2, exam, cs591p1);
-        db.add(examThis);
-
-        Assignment hw1 = new Assignment(0.5,  "Homework1", hwThis);
-        db.add(hw1);
-        Assignment hw2 = new Assignment(0.5,  "Homework2", hwThis);
-        db.add(hw2);
-        Assignment project1 = new Assignment(1,  "Project1", projThis);
-        db.add(project1);
-        Assignment midterm = new Assignment(0.6,  "Midterm", examThis);
-        db.add(midterm);
-        Assignment finalExam = new Assignment(0.5,  "Final Exam", examThis);
-        db.add(finalExam);
-
-        Student s1 = new GraduateStudent("Tian", "Gao", "U809", "gaotian@bu.edu",cs591p1);
-        Student s2 = new GraduateStudent("Xinyue", "Li", "U555", "xili33@bu.edu",cs591p1);
-        Student s3 = new GraduateStudent("Dou", "Bao", "U233", "doubao@bu.edu",cs591p1);
-
-        db.addStudent(s1);
-        db.addStudent(s2);
-        db.addStudent(s3);
+        Course temp =db.findCourse(1);
+        db.createTemplate(temp,"temp");
 
 
 //        s1.setCourse(cs591p1);
