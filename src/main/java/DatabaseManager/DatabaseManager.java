@@ -94,17 +94,31 @@ public class DatabaseManager {
     public Semester findSemester(Integer id){
         em.getTransaction().begin();
         Semester result = em.find(Semester.class,id);
+        em.getTransaction().commit();
         return result;
     }
 
     public Template findTemplate(Integer id){
         em.getTransaction().begin();
         Template result = em.find(Template.class,id);
+        em.getTransaction().commit();
+        return result;
+    }
+
+    public Category findCategoryByName(String name){
+        Category result = null;
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Category s WHERE s.name = :n");
+        q.setParameter("n",name);
+        result = (Category) q.getSingleResult();
+        em.getTransaction().commit();
+
         return result;
     }
 
     public List<Assignment> getAllAssignments(){
         em.getTransaction().begin();
+
         Query q = em.createQuery("SELECT s FROM Assignment s");
         List<Assignment> result = (List<Assignment>) q.getResultList();
         em.getTransaction().commit();
@@ -261,6 +275,31 @@ public class DatabaseManager {
                 assignPercent+=",";
             }
         }
-        System.out.println(categories+"     "+catPercent+"     "+assignNum+"     "+assignPercent);
+        Template temp= new Template(name,categories,catPercent,assignNum,assignPercent);
+        add(temp);
+    }
+
+    public void createCourseByTemplate(Template template, String name, Semester semester){
+        Course course = new Course(name,semester);
+        String category = template.getCategories();
+        String catPercent = template.getCatPercent();
+        String assignNum = template.getAssignNum();
+        String assignPercent = template.getAssignPercent();
+
+        String [] categories = category.substring(1,category.length()-1).split(",");
+        String [] catPercents = catPercent.substring(1,catPercent.length()-1).split(",");
+        String [] assignNums = assignNum.substring(1,assignNum.length()-1).split(",");
+        String [] assignPercents= assignPercent.substring(2,assignPercent.length()-2).split("},\\{");
+
+        for(int i =0;i<categories.length;i++){
+            Category tempCategory = findCategoryByName(categories[i]);
+            CategoryPercent tempCategoryPercent = new CategoryPercent(Double.valueOf(catPercents[i]),tempCategory,course);
+            String [] tempAssignPercents = assignPercents[i].split(",");
+            for(int j =0;j< tempAssignPercents.length;j++){
+                Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]),(categories[i]+j),tempCategoryPercent);
+                add(tempAssignment);
+            }
+
+        }
     }
 }

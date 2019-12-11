@@ -9,9 +9,10 @@ public class Test {
 
     public static void main(String[] args) {
         DatabaseManager db = new DatabaseManager();
+        Semester sem=new Semester("Fall_2019");
 //         Test Data
-        Course temp =db.findCourse(1);
-        db.createTemplate(temp,"temp");
+        Template temp =db.findTemplate(1);
+        db.createCourseByTemplate(temp,"Check1",sem);
 
 
 //        s1.setCourse(cs591p1);
