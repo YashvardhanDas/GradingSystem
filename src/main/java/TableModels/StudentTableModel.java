@@ -1,12 +1,14 @@
 package TableModels;
 
+import Entities.Grades;
 import Entities.Student;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class StudentTableModel extends AbstractTableModel {
-    private String[] columnNames={"name","surname","buId","Email"};
+    private String[] columnNames={"First Name","Last Name","BU ID","Email", "Is Freeze"};
     private List<Student> students;
 
     public StudentTableModel(List<Student> students){
@@ -21,6 +23,10 @@ public class StudentTableModel extends AbstractTableModel {
     @Override
     public int getColumnCount() {
         return this.columnNames.length;
+    }
+
+    public String getColumnName(int col) {
+        return this.columnNames[col];
     }
 
     @Override
@@ -39,7 +45,60 @@ public class StudentTableModel extends AbstractTableModel {
             case 3:
                 result = this.students.get(rowIndex).getEmail();
                 break;
+            case 4:
+                if (this.students.get(rowIndex).isFreezed()) {
+                    result = "True";
+                } else {
+                    result = "False";
+                }
         }
         return result;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        switch (columnIndex){
+            case 0:
+                students.get(rowIndex).setName((String) aValue);
+                break;
+            case 1:
+                students.get(rowIndex).setSurname((String) aValue);
+                break;
+            case 2:
+                students.get(rowIndex).setBuId((String) aValue);
+                break;
+            case 3:
+                students.get(rowIndex).setEmail((String) aValue);
+                break;
+        }
+        // TODO: 2019-12-10 add database function 
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columnIndex != 4;
+    }
+
+    @Override
+    public void fireTableDataChanged() {
+        super.fireTableDataChanged();
+    }
+
+    public void deleteRow(int rowIndex) {
+        students.remove(rowIndex);
+        fireTableDataChanged();
+        // TODO: 2019-12-10  add database function
+    }
+
+    public void changeFreeze(int rowIndex) {
+        if (students.get(rowIndex).isFreezed()) {
+            students.get(rowIndex).setFreezed(false);
+        } else {
+            students.get(rowIndex).setFreezed(true);
+        }
+    }
+
+    public boolean getFreeze(int rowIndex) {
+        return students.get(rowIndex).isFreezed();
     }
 }
