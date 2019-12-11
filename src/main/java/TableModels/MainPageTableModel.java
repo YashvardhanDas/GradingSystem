@@ -2,6 +2,7 @@ package TableModels;
 
 import Entities.Grades;
 import Entities.Student;
+import com.sun.tools.javac.util.JCDiagnostic;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -17,6 +18,9 @@ public class MainPageTableModel extends AbstractTableModel {
     public MainPageTableModel(List<String> columnNames, List<List<Object>> students) {
         this.students = students;
         this.columnNames = columnNames;
+        for (int i = 0; i < students.size(); i++) {
+            updateTotalGrade(i);
+        }
     }
 
 
@@ -49,16 +53,37 @@ public class MainPageTableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex != 0) {
-            if (!isNumeric((String) aValue)) {
-                JOptionPane.showMessageDialog(null,
-                        "Input should be numbers!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+            if (columnIndex == columnNames.size() - 1) {
+                students.get(rowIndex).set(columnIndex, aValue);
             } else {
-                double doubleValue = Double.valueOf((String) aValue);
-                ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
-                ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);
+                if (!isNumeric((String) aValue)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Input should be numbers!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String colName = columnNames.get(columnIndex);
+                    if (!(colName.equals("Student Name") || colName.equals("Total"))) {
+                        double doubleValue = Double.valueOf((String) aValue);
+                        ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
+                        ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);
+                        updateTotalGrade(rowIndex);
+                    }
+                }
             }
         }
+    }
+
+    private void updateTotalGrade(int rowIndex) {
+        List<Object> items = students.get(rowIndex);
+        double sum = 0;
+        for (Object o : items) {
+            if (o instanceof Grades) {
+                double categoryPercent = ((Grades) o).getAssignment().getCategoryPercent().getPercent();
+                double assignmentPercent = ((Grades) o).getAssignment().getPercent();
+                sum += ((Grades) o).getGrade() * categoryPercent * assignmentPercent;
+            }
+        }
+        students.get(rowIndex).set(columnNames.size() - 2, sum);
     }
 
     @Override
@@ -68,7 +93,8 @@ public class MainPageTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex != 0;
+        String colName = columnNames.get(columnIndex);
+        return !(colName.equals("Student Name") || colName.equals("Total"));
     }
 
     private boolean isNumeric(String str) {

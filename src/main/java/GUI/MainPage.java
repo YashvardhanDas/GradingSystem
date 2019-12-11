@@ -190,6 +190,8 @@ public class MainPage extends JFrame {
                     //System.out.println(g.getAssignment().getName());
 
                 }
+                tmp.add(s.getTotalGrade());
+                tmp.add(s.getLetterScore());
                 rowDataList.add(tmp);
             }
 
@@ -204,6 +206,12 @@ public class MainPage extends JFrame {
                 columnToIndex.get(categoryName).add(index);
             }
         }
+        columnNames.add("Total");
+        columnNames.add("Letter Grade");
+        columnToIndex.put("Total", new LinkedList<>());
+        columnToIndex.put("Letter Grade", new LinkedList<>());
+        columnToIndex.get("Total").add(index + 1);
+        columnToIndex.get("Letter Grade").add(index + 2);
 
         MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList);
 
