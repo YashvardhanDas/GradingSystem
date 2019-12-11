@@ -17,6 +17,8 @@ public abstract class Student {
     private String surname;
     private String buId;
     private String email;
+    private double totalGrade=0;
+    private String letterScore="";
     boolean freezed=false;
     String comment = "";
 
@@ -116,6 +118,22 @@ public abstract class Student {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public double getTotalGrade() {
+        return totalGrade;
+    }
+
+    public void setTotalGrade(double totalGrade) {
+        this.totalGrade = totalGrade;
+    }
+
+    public String getLetterScore() {
+        return letterScore;
+    }
+
+    public void setLetterScore(String letterScore) {
+        this.letterScore = letterScore;
     }
 
     @Override
