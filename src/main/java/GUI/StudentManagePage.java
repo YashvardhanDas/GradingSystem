@@ -176,26 +176,30 @@ public class StudentManagePage extends JFrame {
         });
 
         delete.addActionListener(e -> {
-            ((StudentTableModel)table.getModel()).deleteRow(table.getSelectedRow());
-            JOptionPane.showMessageDialog(null, "Delete Successfully!");
+            if (table.getSelectedRow() != -1) {
+                ((StudentTableModel)table.getModel()).deleteRow(table.convertRowIndexToModel(table.getSelectedRow()));
+                JOptionPane.showMessageDialog(null, "Delete Successfully!");
+            }
         });
 
         freeze.addActionListener(e -> {
-            ((StudentTableModel)table.getModel()).changeFreeze(table.getSelectedRow());
-            if (((StudentTableModel)table.getModel()).getFreeze(table.getSelectedRow())) {
-                freeze.setText("Unfreeze");
-            } else {
-                freeze.setText("Freeze");
+            if (table.getSelectedRow() != -1) {
+                ((StudentTableModel)table.getModel()).changeFreeze(table.convertRowIndexToModel(table.getSelectedRow()));
+                if (((StudentTableModel)table.getModel()).getFreeze(table.convertRowIndexToModel(table.getSelectedRow()))) {
+                    freeze.setText("Unfreeze");
+                } else {
+                    freeze.setText("Freeze");
+                }
+                freeze.repaint();
+                JOptionPane.showMessageDialog(null, "Status Change Successfully!");
             }
-            freeze.repaint();
-            JOptionPane.showMessageDialog(null, "Status Change Successfully!");
         });
 
         table.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (table.getSelectedRow() != -1) {
-                    if (((StudentTableModel)table.getModel()).getFreeze(table.getSelectedRow())) {
+                    if (((StudentTableModel)table.getModel()).getFreeze(table.convertRowIndexToModel(table.getSelectedRow()))) {
                         freeze.setText("Unfreeze");
                     } else {
                         freeze.setText("Freeze");
