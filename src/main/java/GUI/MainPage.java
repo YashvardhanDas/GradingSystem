@@ -302,7 +302,7 @@ public class MainPage extends JFrame {
             }
 
             TableColumnModel tcm = table.getColumnModel();
-            for (int i = 1; i <= index; i++) {
+            for (int i = 1; i <= index + 2; i++) {
                 tcm.getColumn(i).setMaxWidth(0);
                 tcm.getColumn(i).setMinWidth(0);
                 tcm.getColumn(i).setPreferredWidth(0);
@@ -310,7 +310,7 @@ public class MainPage extends JFrame {
 
 
             if (categoryToShow.equals("All")) {
-                for (int i = 1; i <= index; i++) {
+                for (int i = 1; i <= index + 2; i++) {
                     tcm.getColumn(i).setMaxWidth(2147483647);
                     tcm.getColumn(i).setMinWidth(15);
                     tcm.getColumn(i).setPreferredWidth(75);
@@ -430,11 +430,15 @@ public class MainPage extends JFrame {
                     comp.setForeground(Color.BLACK);
                 }
             } else {
-                comp.setBackground(Color.WHITE);
-                comp.setForeground(Color.BLACK);
+                if (value.equals("")) {
+                    comp.setBackground(Color.RED);
+                    comp.setForeground(Color.WHITE);
+                } else {
+                    comp.setBackground(Color.WHITE);
+                    comp.setForeground(Color.BLACK);
+                }
             }
             return comp;
-
         }
     }
 

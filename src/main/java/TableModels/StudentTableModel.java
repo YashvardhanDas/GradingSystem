@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class StudentTableModel extends AbstractTableModel {
-    private String[] columnNames={"First Name","Last Name","BU ID","Email", "Is Freeze"};
+    private String[] columnNames={"First Name","Last Name","BU ID","Email", "Is Freeze", "Comments"};
     private List<Student> students;
 
     public StudentTableModel(List<Student> students){
@@ -51,6 +51,10 @@ public class StudentTableModel extends AbstractTableModel {
                 } else {
                     result = "False";
                 }
+                break;
+            case 5:
+                result = this.students.get(rowIndex).getComment();
+                break;
         }
         return result;
     }
@@ -69,6 +73,9 @@ public class StudentTableModel extends AbstractTableModel {
                 break;
             case 3:
                 students.get(rowIndex).setEmail((String) aValue);
+                break;
+            case 5:
+                students.get(rowIndex).setComment((String) aValue);
                 break;
         }
         // TODO: 2019-12-10 add database function 

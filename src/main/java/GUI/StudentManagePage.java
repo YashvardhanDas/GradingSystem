@@ -172,7 +172,7 @@ public class StudentManagePage extends JFrame {
         });
 
         add.addActionListener(e -> {
-            AddStudentPage addStudentPage = new AddStudentPage();
+            AddStudentPage addStudentPage = new AddStudentPage(cs591p1);
         });
 
         delete.addActionListener(e -> {

@@ -1,5 +1,11 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
+import Entities.Course;
+import Entities.GraduateStudent;
+import Entities.Student;
+import Entities.UndergraduateStudent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,8 +30,11 @@ public class AddStudentPage extends JFrame {
     JRadioButton under = new JRadioButton("Undergraduate");
     JButton confirm = new JButton("Confirm");
     JButton ret = new JButton("Cancel");
+    private Course course;
+    private DatabaseManager databaseManager = new DatabaseManager();
 
-    public AddStudentPage(){
+    public AddStudentPage(Course course){
+        this.course = course;
 
         Container contentPane = this.getContentPane();
         contentPane.setLayout(null);
@@ -80,17 +89,25 @@ public class AddStudentPage extends JFrame {
             String studentLName = lname.getText();
             String studentID = id.getText();
             String studentEmail = email.getText();
-            String studentType = this.G2.getSelection().getActionCommand().toLowerCase();
+            String studentType = this.G2.getSelection().getActionCommand();
 
-            if(studentFName.isEmpty() || studentLName.isEmpty() || studentID.isEmpty()|| studentEmail.isEmpty()
+            if(studentFName.isEmpty() || studentLName.isEmpty() || studentID.isEmpty()
                     || studentEmail.isEmpty() || studentType.isEmpty()){
                 JOptionPane.showMessageDialog(null,"Please fill all the blank!");
+            } else {
+                Student newStudent;
+                if (studentType.equals("Graduate")) {
+                    newStudent = new GraduateStudent(studentFName, studentLName, studentID, studentEmail, course);
+                } else {
+                    newStudent = new UndergraduateStudent(studentFName, studentLName, studentID, studentEmail, course);
+                }
+                databaseManager.addStudent(newStudent);
             }
         });
     }
 
     public static void main(String[] args) {
-        AddStudentPage addStudentPage = new AddStudentPage();
+        //AddStudentPage addStudentPage = new AddStudentPage();
     }
 
 }
