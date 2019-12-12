@@ -13,6 +13,8 @@ public class Assignment {
 
     private double percent;
 
+    private double totalScore;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade ={CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "categoryPercent_id")
     private CategoryPercent categoryPercent;
@@ -24,10 +26,11 @@ public class Assignment {
     public Assignment() {
     }
 
-    public Assignment(double percent,String name, CategoryPercent categoryPercent) {
+    public Assignment(double percent,String name, CategoryPercent categoryPercent,Double totalScore) {
         this.percent = percent;
         this.name=name;
         this.categoryPercent = categoryPercent;
+        this.totalScore = totalScore;
     }
 
     public int getId() {
@@ -68,5 +71,13 @@ public class Assignment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(double totalScore) {
+        this.totalScore = totalScore;
     }
 }

@@ -16,16 +16,18 @@ public class Template {
     private String catPercent;
     private String assignNum;
     private String assignPercent;
+    private String assignTotalScore;
 
     public Template() {
     }
 
-    public Template(String name, String categories, String catPercent, String assignNum, String assignPercent) {
+    public Template(String name, String categories, String catPercent, String assignNum, String assignPercent,String assignTotalScore) {
         this.name = name;
         this.categories = categories;
         this.catPercent = catPercent;
         this.assignNum = assignNum;
         this.assignPercent = assignPercent;
+        this.assignTotalScore=assignTotalScore;
     }
 
     public int getId() {
@@ -79,5 +81,13 @@ public class Template {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String getAssignTotalScore() {
+        return assignTotalScore;
+    }
+
+    public void setAssignTotalScore(String assignTotalScore) {
+        this.assignTotalScore = assignTotalScore;
     }
 }

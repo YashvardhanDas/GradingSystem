@@ -250,17 +250,21 @@ public class DatabaseManager {
         String catPercent = "{";
         String assignNum = "{";
         String assignPercent = "{";
+        String assignTotalScore="{";
         for(int i =0; i<course.getCategoryPercents().size();i++){
             categories+=course.getCategoryPercents().get(i).getCategory().getName();
             catPercent+=course.getCategoryPercents().get(i).getPercent();
             assignNum+=course.getCategoryPercents().get(i).getAssignments().size();
             assignPercent+="{";
+            assignTotalScore+="{";
             for(int j =0; j<course.getCategoryPercents().get(i).getAssignments().size();j++){
                 assignPercent+=course.getCategoryPercents().get(i).getAssignments().get(j).getPercent();
                 if(course.getCategoryPercents().get(i).getAssignments().size()== j+1){
                     assignPercent+="}";
+                    assignTotalScore+="}";
                 }else{
                     assignPercent+=",";
+                    assignTotalScore+="}";
                 }
             }
             if(course.getCategoryPercents().size()== i+1){
@@ -268,14 +272,16 @@ public class DatabaseManager {
                 catPercent+="}";
                 assignNum+="}";
                 assignPercent+="}";
+                assignTotalScore+="}";
             }else{
                 categories+=",";
                 catPercent+=",";
                 assignNum+=",";
                 assignPercent+=",";
+                assignTotalScore+="}";
             }
         }
-        Template temp= new Template(name,categories,catPercent,assignNum,assignPercent);
+        Template temp= new Template(name,categories,catPercent,assignNum,assignPercent,assignTotalScore);
         add(temp);
     }
 
@@ -285,21 +291,32 @@ public class DatabaseManager {
         String catPercent = template.getCatPercent();
         String assignNum = template.getAssignNum();
         String assignPercent = template.getAssignPercent();
+        String assignTotalScore = template.getAssignTotalScore();
 
         String [] categories = category.substring(1,category.length()-1).split(",");
         String [] catPercents = catPercent.substring(1,catPercent.length()-1).split(",");
         String [] assignNums = assignNum.substring(1,assignNum.length()-1).split(",");
         String [] assignPercents= assignPercent.substring(2,assignPercent.length()-2).split("},\\{");
+        String [] assignTotalScores= assignTotalScore.substring(2,assignPercent.length()-2).split("},\\{");
 
         for(int i =0;i<categories.length;i++){
             Category tempCategory = findCategoryByName(categories[i]);
             CategoryPercent tempCategoryPercent = new CategoryPercent(Double.valueOf(catPercents[i]),tempCategory,course);
             String [] tempAssignPercents = assignPercents[i].split(",");
             for(int j =0;j< tempAssignPercents.length;j++){
-                Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]),(categories[i]+j),tempCategoryPercent);
+                Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]),(categories[i]+j),tempCategoryPercent,Double.valueOf(assignTotalScores[j]));
                 add(tempAssignment);
             }
 
         }
+    }
+
+    public void gradeAssignment(Grades grades, double result){
+        if(result<=0){
+            grades.setGrade((grades.getAssignment().getTotalScore()-result)/grades.getAssignment().getTotalScore());
+        }else {
+            grades.setGrade(result);
+        }
+        update(grades);
     }
 }
