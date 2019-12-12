@@ -217,7 +217,7 @@ public class MainPage extends JFrame {
         columnToIndex.get("Total").add(index + 1);
         columnToIndex.get("Letter Grade").add(index + 2);
 
-        MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList);
+        MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList, this.students);
 
         //table = new JTable(mainPageTableModel);
         table = new JTable(mainPageTableModel);
@@ -360,21 +360,9 @@ public class MainPage extends JFrame {
                             "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     double doubleValue = Double.valueOf(stringValue);
-                    System.out.println(stringValue);
-                    System.out.println(doubleValue);
                     updateStatistics();
-//                    stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
-//                    //refresh the JTable
-//                    stockTable.repaint();
-//                    JOptionPane.showMessageDialk1og(null, "Success! " +
-//                            "Change the price to " + doubleValue);
-//
-//                    // update the price in database
-//                    Integer id = (Integer) stockTable.getValueAt(stockTable.getSelectedRow(), 0);
-//                    Shares share = db.findShares(id);
-//                    share.setSharePrice(doubleValue);
-//                    db.update(share);
-//                    db.updatePrivateShares(share);
+                    ((MainPageTableModel)table.getModel()).curveTotalGrade(doubleValue);
+                    table.repaint();
                 }
             }
         });

@@ -1,5 +1,6 @@
 package TableModels;
 
+import DatabaseManager.DatabaseManager;
 import Entities.Grades;
 import Entities.Student;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class StudentTableModel extends AbstractTableModel {
     private String[] columnNames={"First Name","Last Name","BU ID","Email", "Is Freeze", "Comments"};
     private List<Student> students;
+    private DatabaseManager databaseManager = new DatabaseManager();
 
     public StudentTableModel(List<Student> students){
         this.students=students;

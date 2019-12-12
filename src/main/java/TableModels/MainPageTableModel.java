@@ -1,5 +1,6 @@
 package TableModels;
 
+import DatabaseManager.DatabaseManager;
 import Entities.Grades;
 import Entities.Student;
 import com.sun.tools.javac.util.JCDiagnostic;
@@ -14,13 +15,18 @@ import java.util.List;
 public class MainPageTableModel extends AbstractTableModel {
     private List<List<Object>> students;
     private List<String> columnNames;
+    private List<Student> studentEntities;
+    private DatabaseManager databaseManager = new DatabaseManager();
 
-    public MainPageTableModel(List<String> columnNames, List<List<Object>> students) {
+
+    public MainPageTableModel(List<String> columnNames, List<List<Object>> students, List<Student> studentEntities) {
         this.students = students;
         this.columnNames = columnNames;
+        this.studentEntities = studentEntities;
         for (int i = 0; i < students.size(); i++) {
             updateTotalGrade(i);
         }
+        updateDatabase();
     }
 
 
@@ -40,13 +46,6 @@ public class MainPageTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-//        Object result = null;
-//        if(columnIndex==0){
-//            result = students.get(rowIndex).get(columnIndex);
-//        }else{
-//            result = students.get(rowIndex).get(columnIndex);
-//        }
-
         return students.get(rowIndex).get(columnIndex);
     }
 
@@ -55,6 +54,7 @@ public class MainPageTableModel extends AbstractTableModel {
         if (columnIndex != 0) {
             if (columnIndex == columnNames.size() - 1) {
                 students.get(rowIndex).set(columnIndex, aValue);
+                studentEntities.get(rowIndex).setLetterScore((String) aValue);
             } else {
                 if (!isNumeric((String) aValue)) {
                     JOptionPane.showMessageDialog(null,
@@ -64,12 +64,18 @@ public class MainPageTableModel extends AbstractTableModel {
                     String colName = columnNames.get(columnIndex);
                     if (!(colName.equals("Student Name") || colName.equals("Total"))) {
                         double doubleValue = Double.valueOf((String) aValue);
+                        if (doubleValue < 0) {
+                            doubleValue = 100 + doubleValue;
+                        }
                         ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
                         ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);
+                        studentEntities.get(rowIndex).getGrades().get(columnIndex - 1).setGrade(doubleValue);
+                        studentEntities.get(rowIndex).getGrades().get(columnIndex - 1).setGraded(true);
                         updateTotalGrade(rowIndex);
                     }
                 }
             }
+            updateDatabase();
         }
     }
 
@@ -84,6 +90,18 @@ public class MainPageTableModel extends AbstractTableModel {
             }
         }
         students.get(rowIndex).set(columnNames.size() - 2, sum);
+        studentEntities.get(rowIndex).setTotalGrade(sum);
+    }
+
+    public void curveTotalGrade(double curveGrade) {
+        int rowIndex = 0;
+        for (List<Object> row : students) {
+            double newGrade = (double) row.get(columnNames.size() - 2) + curveGrade;
+            row.set(columnNames.size() - 2, newGrade);
+            studentEntities.get(rowIndex).setTotalGrade(newGrade);
+            rowIndex++;
+        }
+        updateDatabase();
     }
 
     @Override
@@ -105,5 +123,11 @@ public class MainPageTableModel extends AbstractTableModel {
             return false;
         }
         return true;
+    }
+
+    private void updateDatabase() {
+        for (Student s : studentEntities) {
+            databaseManager.update(s);
+        }
     }
 }
