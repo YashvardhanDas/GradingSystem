@@ -39,7 +39,7 @@ public class AddCoursePage extends JFrame {
     private DatabaseManager databaseManager = new DatabaseManager();
     private String path = "";
 
-    public AddCoursePage(){
+    public AddCoursePage() {
         Container contentPane = this.getContentPane();
         contentPane.setLayout(null);
 
@@ -68,7 +68,7 @@ public class AddCoursePage extends JFrame {
         labels.add(courseName);
         labels.add(semester);
         labels.add(template);
-        labels.setBounds(30,40,130,180);
+        labels.setBounds(30, 40, 130, 180);
         contentPane.add(labels);
 
         inputs.setLayout(new GridLayout(7, 1));
@@ -79,17 +79,17 @@ public class AddCoursePage extends JFrame {
         inputs.add(new JLabel());
         inputs.add(templateInput);
         inputs.add(new JLabel());
-        inputs.setBounds(170,30,400,205);
+        inputs.setBounds(170, 30, 400, 205);
         contentPane.add(inputs);
 
         next.setForeground(Color.BLUE);
 //        next.addActionListener(this);
 //        cancel.addActionListener(this);
-        buttons.setLayout(new GridLayout(1,3));
+        buttons.setLayout(new GridLayout(1, 3));
         buttons.add(load);
         buttons.add(cancel);
         buttons.add(next);
-        buttons.setBounds(30,250,560,50);
+        buttons.setBounds(30, 250, 560, 50);
         contentPane.add(buttons);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -118,18 +118,20 @@ public class AddCoursePage extends JFrame {
 
         next.addActionListener(e -> {
             if (path.equals("") && templateInput.getSelectedItem() == null) {
+                // Template: No, CSV: No
                 Course newCourse = new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem());
                 databaseManager.add(newCourse);
+            } else if (templateInput.getSelectedItem() == null && !path.equals("")) {
+                // Template: No, CSV: Yes
+                databaseManager.createCourseFromCsv(new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
+                        , path);
             } else {
-                if (templateInput.getSelectedItem() == null && !path.equals("")) {
-                    databaseManager.createCourseFromCsv( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
-                            , path);
-                } else {
-                    databaseManager.createCourseByTemplate((Template)templateInput.getSelectedItem(), nameInput.getText(),
-                            (Semester) semesterInput.getSelectedItem(), path);
-                }
-
+                // Template: Yes, CSV: Yes
+                // Template: Yes, CSV: No
+                databaseManager.createCourseByTemplate((Template) templateInput.getSelectedItem(), nameInput.getText(),
+                        (Semester) semesterInput.getSelectedItem(), path);
             }
+            JOptionPane.showMessageDialog(null, "Add Course Successfully!");
         });
 
 
