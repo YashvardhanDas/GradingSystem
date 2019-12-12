@@ -80,4 +80,9 @@ public class Assignment {
     public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

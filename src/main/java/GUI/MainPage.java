@@ -340,7 +340,7 @@ public class MainPage extends JFrame {
         });
 
         deleteAssignment.addActionListener(e -> {
-            DeleteAssignmentPage deleteAssignmentPage = new DeleteAssignmentPage();
+            DeleteAssignmentPage deleteAssignmentPage = new DeleteAssignmentPage(courseId);
         });
 
         courseStructure.addActionListener(e -> {

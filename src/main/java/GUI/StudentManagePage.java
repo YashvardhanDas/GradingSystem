@@ -66,11 +66,11 @@ public class StudentManagePage extends JFrame {
         CategoryPercent projThis  = new CategoryPercent(0.3, project, cs591p1);
         CategoryPercent examThis  = new CategoryPercent(0.2, exam, cs591p1);
 
-        Assignment hw1 = new Assignment(0.5,  "Homework1", hwThis);
-        Assignment hw2 = new Assignment(0.5,  "Homework2", hwThis);
-        Assignment project1 = new Assignment(1,  "Project1", projThis);
-        Assignment midterm = new Assignment(0.6,  "Midterm", examThis);
-        Assignment finalExam = new Assignment(0.5,  "Final Exam", examThis);
+        Assignment hw1 = new Assignment(0.5,  "Homework1", hwThis, 100.0);
+        Assignment hw2 = new Assignment(0.5,  "Homework2", hwThis, 100.0);
+        Assignment project1 = new Assignment(1,  "Project1", projThis, 100.0);
+        Assignment midterm = new Assignment(0.6,  "Midterm", examThis, 100.0);
+        Assignment finalExam = new Assignment(0.5,  "Final Exam", examThis, 100.0);
 
         java.util.List<Assignment> homeworks = new LinkedList<>();
         java.util.List<Assignment> projects = new LinkedList<>();

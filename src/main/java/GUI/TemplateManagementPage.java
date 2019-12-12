@@ -135,6 +135,7 @@ public class TemplateManagementPage extends JFrame{
     public static void main(String[] args) {
 
 
+
         TemplateManagementPage templateManagementPage = new TemplateManagementPage();
     }
 }

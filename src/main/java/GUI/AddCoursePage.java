@@ -34,6 +34,7 @@ public class AddCoursePage extends JFrame {
 
         semesterInput.addItem("Fall 2019");
         semesterInput.addItem("Spring 2019");
+        semesterInput.addItem("Spring 2020");
         templateInput.addItem("T1");
         templateInput.addItem("T2");
         templateInput.setSelectedItem(null);

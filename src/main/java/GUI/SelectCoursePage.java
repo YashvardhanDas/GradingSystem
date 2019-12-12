@@ -46,14 +46,17 @@ public class SelectCoursePage extends JFrame {
                     values.put(s.toString(), databaseManager.getCoursesBySemester(s));
                 }
 
-                JComboBox<Semester> semesters = new JComboBox<>(values.keySet().toArray(new Semester[values.keySet().size()]));
-                semesters.setSelectedItem(null);
+                JComboBox<Semester> semestersBox = new JComboBox<>();
+                for (Semester s : semesters) {
+                    semestersBox.addItem(s);
+                }
+                semestersBox.setSelectedItem(null);
                 JComboBox<Course> courses = new JComboBox<>(new DefaultComboBoxModel<>());
 
-                semesters.addActionListener(new ActionListener() {
+                semestersBox.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String value = (String) semesters.getSelectedItem();
+                        Semester value = (Semester) semestersBox.getSelectedItem();
                         List<Course> secondValues = values.get(value);
 
                         DefaultComboBoxModel model = (DefaultComboBoxModel) courses.getModel();
@@ -67,7 +70,7 @@ public class SelectCoursePage extends JFrame {
                 //JComboBox courses = new JComboBox();
                 courses.setPreferredSize(new Dimension(350, 30));
                 //JComboBox semesters = new JComboBox();
-                semesters.setPreferredSize(new Dimension(350, 30));
+                semestersBox.setPreferredSize(new Dimension(350, 30));
                 Container contentPane = getContentPane();
 
                 contentPane.setLayout(null);
@@ -97,12 +100,12 @@ public class SelectCoursePage extends JFrame {
 
                 semesterLabel.setBounds(50, 100, 70,30);
                 courseLabel.setBounds(50, 140, 70,  30);
-                semesters.setBounds(130, 100, 400, 30);
+                semestersBox.setBounds(130, 100, 400, 30);
                 courses.setBounds(130, 140, 400, 30);
 
                 add(semesterLabel);
                 add(courseLabel);
-                add(semesters);
+                add(semestersBox);
                 add(courses);
 
 //        add.addActionListener(this);
