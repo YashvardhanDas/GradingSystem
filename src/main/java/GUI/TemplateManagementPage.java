@@ -1,5 +1,8 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
+import Entities.Course;
+import Entities.Semester;
 import Entities.Template;
 import TableModels.TemplateTableModel;
 
@@ -30,32 +33,54 @@ public class TemplateManagementPage extends JFrame{
     TemplateTableModel templateSheet;
     JTable tSheet;
 
-    public TemplateManagementPage(List<Template> inputList) {
+    //DatabaseManager db= new DatabaseManager();
 
-        List<Template> templateList = inputList;
+    public TemplateManagementPage() {
+
+        //TODO
+        //Starting here is the fake data part
+        //to be switched by reading from databse
+        List<Template> list = new ArrayList<>();
+        Template temp = new Template("template 1", "{Homework, Exam}", "{50, 50}", "3", "{30, 30, 30}", "100");
+
+        list.add(temp);
+
+        List<Course> listc = new ArrayList<>();
+        Course course = new Course("course 591", new Semester());
+        listc.add(course);
+
+
+        //Ending the fake data part
+
+        List<Template> templateList = list;
+        List<String> listcourseName = new ArrayList<>();
+        for (Course course1 : listc) {
+            listcourseName.add(course1.getName());
+        }
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                /* TODO: Add category in ComboBox, Change Default to real
-                values.add("Homework");
-                values.add("Quiz");
-                values.add("Exam");
-                 */
-                JComboBox<String> templateBox = new JComboBox<>(new DefaultComboBoxModel<>());
-                templateBox.setSelectedItem(null);
-                JComboBox<String> course = new JComboBox<>(new DefaultComboBoxModel<>());
+                JComboBox<Template> templateBox = new JComboBox<>(new DefaultComboBoxModel<>());
+                for (Template t : templateList) {
+                    templateBox.addItem(t);
+                }
 
-                //TODO: Add functional table
-                //defaultSheet = new DefaultTableModel(templateList);
+                templateBox.setSelectedItem(null);
+                JComboBox<Course> course = new JComboBox<>(new DefaultComboBoxModel<>());
+                for (Course c : listc) {
+                    course.addItem(c);
+                }
+
 
                 //List<String> colNameList = Arrays.asList("Name", "Categories", "Cat Percentage", "Assignment Number", "Assignment Percentage");
                 List<String> colNameList = new ArrayList<>();
                 colNameList.add("Name");
                 colNameList.add("Category");
-                colNameList.add("name");
-                colNameList.add("name");
-                colNameList.add("name");
+                colNameList.add("Category Percentage");
+                colNameList.add("Assignment Number");
+                colNameList.add("Assignment Percentage");
+                colNameList.add("Assignment Total");
 
 
                 templateSheet = new TemplateTableModel(colNameList, templateList);
@@ -108,11 +133,8 @@ public class TemplateManagementPage extends JFrame{
 
     }
     public static void main(String[] args) {
-        List<Template> list = new ArrayList<>();
-        Template temp = new Template("template 1", "{Homework, Exam}", "{50, 50}", "3", "{30, 30, 30}");
 
-        list.add(temp);
 
-        TemplateManagementPage templateManagementPage = new TemplateManagementPage(list);
+        TemplateManagementPage templateManagementPage = new TemplateManagementPage();
     }
 }

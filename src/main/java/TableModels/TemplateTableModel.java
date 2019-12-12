@@ -10,7 +10,7 @@ public class TemplateTableModel extends AbstractTableModel {
     private List<Template> templateList;
     private List<String> colNameList;
 
-    public TemplateTableModel (List<String> colNameList, List<Template> list) {
+    public TemplateTableModel(List<String> colNameList, List<Template> list) {
         this.colNameList = colNameList;
         templateList = list;
     }
@@ -23,7 +23,7 @@ public class TemplateTableModel extends AbstractTableModel {
     @Override
     public int getColumnCount() {
         //TODO: get comlumn count from template class
-        return 5;
+        return colNameList.size();
     }
 
     @Override
@@ -41,6 +41,33 @@ public class TemplateTableModel extends AbstractTableModel {
         list.add(template.getCatPercent());
         list.add(template.getAssignNum());
         list.add(template.getAssignPercent());
+        list.add(template.getAssignTotalScore());
         return list.get(columnIndex);
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        String value = (String) aValue;
+        Template template = templateList.get(rowIndex);
+
+        if (columnIndex == 0) {
+            template.setName(value);
+        } else if (columnIndex == 1) {
+            template.setCategories(value);
+        } else if (columnIndex == 2) {
+            template.setCatPercent(value);
+        } else if (columnIndex == 3) {
+            template.setAssignNum(value);
+        } else if (columnIndex == 4) {
+            template.setAssignPercent(value);
+        } else if (columnIndex == 5) {
+            template.setAssignTotalScore(value);
+        }
+
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
     }
 }
