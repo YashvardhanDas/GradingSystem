@@ -46,9 +46,9 @@ public class SelectCoursePage extends JFrame {
                     values.put(s.toString(), databaseManager.getCoursesBySemester(s));
                 }
 
-                JComboBox<Semester> semestersBox = new JComboBox<>();
+                JComboBox<String> semestersBox = new JComboBox<>();
                 for (Semester s : semesters) {
-                    semestersBox.addItem(s);
+                    semestersBox.addItem(s.toString());
                 }
                 semestersBox.setSelectedItem(null);
                 JComboBox<Course> courses = new JComboBox<>(new DefaultComboBoxModel<>());
@@ -56,7 +56,7 @@ public class SelectCoursePage extends JFrame {
                 semestersBox.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Semester value = (Semester) semestersBox.getSelectedItem();
+                        String value = (String) semestersBox.getSelectedItem();
                         List<Course> secondValues = values.get(value);
 
                         DefaultComboBoxModel model = (DefaultComboBoxModel) courses.getModel();
