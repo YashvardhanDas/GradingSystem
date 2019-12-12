@@ -63,8 +63,9 @@ public class MainPageTableModel extends AbstractTableModel {
                     String colName = columnNames.get(columnIndex);
                     if (!(colName.equals("Student Name") || colName.equals("Total"))) {
                         double doubleValue = Double.valueOf((String) aValue);
-                        if (doubleValue < 0) {
-                            doubleValue = 100 + doubleValue;
+                        if (doubleValue <= 0) {
+                            doubleValue = ((Grades) students.get(rowIndex).get(columnIndex)).getAssignment().getTotalScore()
+                                    + doubleValue;
                         }
                         ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
                         ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);

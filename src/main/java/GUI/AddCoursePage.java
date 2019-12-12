@@ -1,9 +1,16 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
+import Entities.Course;
+import Entities.Semester;
+import Entities.Template;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 
 public class AddCoursePage extends JFrame {
@@ -28,15 +35,27 @@ public class AddCoursePage extends JFrame {
     public static String lecturerName;
     public static String semesterName;
 
+    private DatabaseManager databaseManager = new DatabaseManager();
+
     public AddCoursePage(){
         Container contentPane = this.getContentPane();
         contentPane.setLayout(null);
 
-        semesterInput.addItem("Fall 2019");
-        semesterInput.addItem("Spring 2019");
-        semesterInput.addItem("Spring 2020");
-        templateInput.addItem("T1");
-        templateInput.addItem("T2");
+        Semester fall2019 = new Semester("Fall 2019");
+        Semester spring2019 = new Semester("Spring 2019");
+        Semester spring2020 = new Semester("Spring 2020");
+
+        Template T1 = new Template("template 1", "{Homework, Exam}",
+                "{50, 50}", "3", "{30, 30, 30}", "100");
+        Template T2 = new Template("template 2", "{Homework, Exam}",
+                "{50, 50}", "3", "{30, 30, 30}", "100");
+
+        semesterInput.addItem(fall2019);
+        semesterInput.addItem(spring2019);
+        semesterInput.addItem(spring2020);
+
+        templateInput.addItem(T1);
+        templateInput.addItem(T2);
         templateInput.setSelectedItem(null);
 
         labels.setLayout(new GridLayout(3, 1));
@@ -77,34 +96,37 @@ public class AddCoursePage extends JFrame {
         cancel.addActionListener(e -> {
             dispose();
         });
+
+        load.addActionListener(e -> {
+            String path = "";
+            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+            int returnValue = jfc.showOpenDialog(this);
+            // int returnValue = jfc.showSaveDialog(null);
+
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = jfc.getSelectedFile();
+                path = selectedFile.getAbsolutePath();
+            }
+
+            if (path.equals("") && templateInput.getSelectedItem() == null) {
+                 Course newCourse = new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem());
+                 databaseManager.add(newCourse);
+            } else {
+                if (templateInput.getSelectedItem() == null && !path.equals("")) {
+                    databaseManager.createCourseFromCsv( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
+                    , path);
+                } else {
+                    databaseManager.createCourseByTemplate((Template)templateInput.getSelectedItem(), nameInput.getText(),
+                            (Semester) semesterInput.getSelectedItem(), path);
+                }
+
+            }
+        });
+
+
     }
 
-//    public void actionPerformed(ActionEvent e){
-//        if(e.getSource() == next){
-//            name = nameInput.getText();
-//            lecturerName = lecturerInput.getText();
-//            semesterName = semesterInput.getText();
-//            String nameCheck, lecturerCheck, semesterCheck;
-//            nameCheck = name.replaceAll(" ","");
-//            lecturerCheck = lecturerName.replaceAll(" ","");
-//            semesterCheck = semesterName.replaceAll(" ","");
-//            if (nameCheck.length() != 0 && lecturerCheck.length() != 0 && semesterCheck.length() != 0){
-//                for (int i = 0; i < Select_Course_UI.course.length; i++){
-//                    if (Select_Course_UI.course[i] == null){
-//                        Select_Course_UI.course[i] = name;
-//                        break;
-//                    }
-//                }
-//                dispose();
-//                new Add_Assignment_info_UI(grading_system,name, lecturerName, semesterName);
-//            } else {
-//                JOptionPane.showMessageDialog(null,"Please input valid information");
-//            }
-//        } else if(e.getSource() == cancel){
-//            dispose();
-//            new Select_Course_UI(grading_system);
-//        }
-//    }
 
     public static void main(String[] args) {
         AddCoursePage addCoursePage = new AddCoursePage();

@@ -299,18 +299,19 @@ public class DatabaseManager {
         String [] assignPercents= assignPercent.substring(2,assignPercent.length()-2).split("},\\{");
         String [] assignTotalScores= assignTotalScore.substring(2,assignPercent.length()-2).split("},\\{");
 
-        for(int i =0;i<categories.length;i++){
+        for(int i =0;i<categories.length;i++) {
             Category tempCategory = findCategoryByName(categories[i]);
-            CategoryPercent tempCategoryPercent = new CategoryPercent(Double.valueOf(catPercents[i]),tempCategory,course);
-            String [] tempAssignPercents = assignPercents[i].split(",");
-            for(int j =0;j< tempAssignPercents.length;j++){
-                Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]),(categories[i]+j),tempCategoryPercent,Double.valueOf(assignTotalScores[j]));
+            CategoryPercent tempCategoryPercent = new CategoryPercent(Double.valueOf(catPercents[i]), tempCategory, course);
+            String[] tempAssignPercents = assignPercents[i].split(",");
+            for (int j = 0; j < tempAssignPercents.length; j++) {
+                Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]), (categories[i] + j), tempCategoryPercent, Double.valueOf(assignTotalScores[j]));
                 add(tempAssignment);
 
-        }
-        if(csv.equals("")){
-        }else{
-            createCourseFromCsv(course,csv);
+            }
+            if (csv.equals("")) {
+            } else {
+                createCourseFromCsv(course, csv);
+            }
         }
     }
 
