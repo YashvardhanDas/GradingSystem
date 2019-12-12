@@ -1,5 +1,6 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
 import Entities.*;
 import TableModels.MainPageTableModel;
 
@@ -47,10 +48,15 @@ public class MainPage extends JFrame {
     private int count = 0;
     List<Double> gradeList = new LinkedList<>();
     private List<Student> students;
+    private Course course;
+    private DatabaseManager databaseManager = new DatabaseManager();
 
     // Constructor
-    public MainPage() {
-        className = new JLabel("CS 591P1 Fall 2019");
+    public MainPage(int courseId) {
+        this.course = databaseManager.findCourse(courseId);
+        this.students = course.getStudents();
+
+        className = new JLabel(course.toString() + " " + course.getSemester().toString());
         Font labelFont1 = new Font(Font.DIALOG, Font.BOLD, 20);
         className.setFont(labelFont1);
 
@@ -59,100 +65,98 @@ public class MainPage extends JFrame {
         filter.setFont(labelFont2);
 
         notGraded = new JLabel("Not graded:");
-        statistic = new JLabel("Average: 75.0  Median: 74.8  Standard Deviation: 5.0");
+        statistic = new JLabel("Average: 0.0  Median: 0.0  Standard Deviation: 0.0");
         category = new JLabel("Category:");
 
         categoriesBox = new JComboBox();
         categoriesBox.addItem("All");
-        categoriesBox.addItem("Homework");
-        categoriesBox.addItem("Project");
-        categoriesBox.addItem("Exam");
+        for (CategoryPercent cp : course.getCategoryPercents()) {
+            categoriesBox.addItem(cp.getCategory().getName());
+        }
 
         notGradedBox = new JCheckBox("Not Graded");
 
 
         // Test Data
-        Course cs591p1 = new Course("CS591 P1", null);
-
-        Student s1 = new GraduateStudent("Tian", "Gao", "U809", "gaotian@bu.edu");
-        Student s2 = new GraduateStudent("Xinyue", "Li", "U555", "xili33@bu.edu");
-        Student s3 = new GraduateStudent("Dou", "Bao", "U233", "doubao@bu.edu");
-
-        s1.setCourse(cs591p1);
-        s2.setCourse(cs591p1);
-        s3.setCourse(cs591p1);
-
-        List<Student> students = new LinkedList<>();
-        students.add(s1);
-        students.add(s2);
-        students.add(s3);
-
-        Category hw = new Category("Homework", null);
-        Category project = new Category("Project", null);
-        Category exam = new Category("Exam", null);
-
-        CategoryPercent hwThis  = new CategoryPercent(0.5, hw, cs591p1);
-        CategoryPercent projThis  = new CategoryPercent(0.3, project, cs591p1);
-        CategoryPercent examThis  = new CategoryPercent(0.2, exam, cs591p1);
-
-        Assignment hw1 = new Assignment(0.5,  "Homework1", hwThis);
-        Assignment hw2 = new Assignment(0.5,  "Homework2", hwThis);
-        Assignment project1 = new Assignment(1,  "Project1", projThis);
-        Assignment midterm = new Assignment(0.6,  "Midterm", examThis);
-        Assignment finalExam = new Assignment(0.5,  "Final Exam", examThis);
-
-        List<Assignment> homeworks = new LinkedList<>();
-        List<Assignment> projects = new LinkedList<>();
-        List<Assignment> exams = new LinkedList<>();
-        homeworks.add(hw1);
-        homeworks.add(hw2);
-        projects.add(project1);
-        exams.add(midterm);
-        exams.add(finalExam);
-        hwThis.setAssignments(homeworks);
-        projThis.setAssignments(projects);
-        examThis.setAssignments(exams);
-
-        List<CategoryPercent> categoryPercents = new LinkedList<>();
-        categoryPercents.add(hwThis);
-        categoryPercents.add(projThis);
-        categoryPercents.add(examThis);
-
-        cs591p1.setCategoryPercents(categoryPercents);
-
-        Grades hw1Grade  = new Grades();
-        hw1Grade.setAssignment(hw1);
-        hw1Grade.setGrade(95);
-        hw1Grade.setGraded(true);
-        Grades hw2Grade  = new Grades();
-        hw2Grade.setAssignment(hw2);
-        hw2Grade.setGrade(60);
-        hw2Grade.setGraded(true);
-        Grades proj1Grade  = new Grades();
-        proj1Grade.setAssignment(project1);
-        proj1Grade.setGrade(88);
-        proj1Grade.setGraded(true);
-        Grades midtermGrade  = new Grades();
-        midtermGrade.setAssignment(midterm);
-        midtermGrade.setGrade(100);
-        midtermGrade.setGraded(true);
-        Grades finalGrade  = new Grades();
-        finalGrade.setAssignment(finalExam);
-        finalGrade.setGrade(0);
-        finalGrade.setGraded(false);
-
-        List<Grades> grades = new LinkedList<>();
-        grades.add(hw1Grade);
-        grades.add(hw2Grade);
-        grades.add(proj1Grade);
-        grades.add(midtermGrade);
-        grades.add(finalGrade);
-
-        s1.setGrades(grades);
-        s2.setGrades(grades);
-        s3.setGrades(grades);
-
-        this.students = students;
+//        Course cs591p1 = new Course("CS591 P1", null);
+//
+//        Student s1 = new GraduateStudent("Tian", "Gao", "U809", "gaotian@bu.edu");
+//        Student s2 = new GraduateStudent("Xinyue", "Li", "U555", "xili33@bu.edu");
+//        Student s3 = new GraduateStudent("Dou", "Bao", "U233", "doubao@bu.edu");
+//
+//        s1.setCourse(cs591p1);
+//        s2.setCourse(cs591p1);
+//        s3.setCourse(cs591p1);
+//
+//        List<Student> students = new LinkedList<>();
+//        students.add(s1);
+//        students.add(s2);
+//        students.add(s3);
+//
+//        Category hw = new Category("Homework", null);
+//        Category project = new Category("Project", null);
+//        Category exam = new Category("Exam", null);
+//
+//        CategoryPercent hwThis  = new CategoryPercent(0.5, hw, cs591p1);
+//        CategoryPercent projThis  = new CategoryPercent(0.3, project, cs591p1);
+//        CategoryPercent examThis  = new CategoryPercent(0.2, exam, cs591p1);
+//
+//        Assignment hw1 = new Assignment(0.5,  "Homework1", hwThis);
+//        Assignment hw2 = new Assignment(0.5,  "Homework2", hwThis);
+//        Assignment project1 = new Assignment(1,  "Project1", projThis);
+//        Assignment midterm = new Assignment(0.6,  "Midterm", examThis);
+//        Assignment finalExam = new Assignment(0.5,  "Final Exam", examThis);
+//
+//        List<Assignment> homeworks = new LinkedList<>();
+//        List<Assignment> projects = new LinkedList<>();
+//        List<Assignment> exams = new LinkedList<>();
+//        homeworks.add(hw1);
+//        homeworks.add(hw2);
+//        projects.add(project1);
+//        exams.add(midterm);
+//        exams.add(finalExam);
+//        hwThis.setAssignments(homeworks);
+//        projThis.setAssignments(projects);
+//        examThis.setAssignments(exams);
+//
+//        List<CategoryPercent> categoryPercents = new LinkedList<>();
+//        categoryPercents.add(hwThis);
+//        categoryPercents.add(projThis);
+//        categoryPercents.add(examThis);
+//
+//        cs591p1.setCategoryPercents(categoryPercents);
+//
+//        Grades hw1Grade  = new Grades();
+//        hw1Grade.setAssignment(hw1);
+//        hw1Grade.setGrade(95);
+//        hw1Grade.setGraded(true);
+//        Grades hw2Grade  = new Grades();
+//        hw2Grade.setAssignment(hw2);
+//        hw2Grade.setGrade(60);
+//        hw2Grade.setGraded(true);
+//        Grades proj1Grade  = new Grades();
+//        proj1Grade.setAssignment(project1);
+//        proj1Grade.setGrade(88);
+//        proj1Grade.setGraded(true);
+//        Grades midtermGrade  = new Grades();
+//        midtermGrade.setAssignment(midterm);
+//        midtermGrade.setGrade(100);
+//        midtermGrade.setGraded(true);
+//        Grades finalGrade  = new Grades();
+//        finalGrade.setAssignment(finalExam);
+//        finalGrade.setGrade(0);
+//        finalGrade.setGraded(false);
+//
+//        List<Grades> grades = new LinkedList<>();
+//        grades.add(hw1Grade);
+//        grades.add(hw2Grade);
+//        grades.add(proj1Grade);
+//        grades.add(midtermGrade);
+//        grades.add(finalGrade);
+//
+//        s1.setGrades(grades);
+//        s2.setGrades(grades);
+//        s3.setGrades(grades);
 
 
         List<List<Object>> rowDataList = new LinkedList<>();
@@ -164,7 +168,7 @@ public class MainPage extends JFrame {
         // if there is no student in the course, get the column from Course
         if (students == null) {
             index = 0;
-            for (CategoryPercent cp : cs591p1.getCategoryPercents()) {
+            for (CategoryPercent cp : course.getCategoryPercents()) {
                 String categoryName = cp.getCategory().getName();
                 for (Assignment assignment : cp.getAssignments()) {
                     String assignmentName = assignment.getName();
@@ -490,6 +494,6 @@ public class MainPage extends JFrame {
     }
 
     public static void main(String[] args) {
-        MainPage mainPage = new MainPage();
+        MainPage mainPage = new MainPage(0);
     }
 }

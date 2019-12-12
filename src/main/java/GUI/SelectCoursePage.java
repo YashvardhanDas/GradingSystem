@@ -1,5 +1,9 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
+import Entities.Course;
+import Entities.Semester;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,32 +32,34 @@ public class SelectCoursePage extends JFrame {
 
     int getSelect = -1;
 
-    private static Map<String, List<String>> values;
+    private static Map<String, List<Course>> values;
+    private List<Semester> semesters;
+    private DatabaseManager databaseManager = new DatabaseManager();
 
     public SelectCoursePage() {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 values = new HashMap<>();
+                semesters = databaseManager.getAllSemester();
+                for (Semester s : semesters) {
+                    values.put(s.toString(), databaseManager.getCoursesBySemester(s));
+                }
 
-                values.put("Fall 2019", Arrays.asList("CS591 P1", "CS 506"));
-                values.put("Spring 2019", Arrays.asList("CS 504", "CS 552", "CS 542"));
-                values.put("Fall 2018", Arrays.asList("CS 530", "CS 660", "CS 565"));
-
-                JComboBox<String> semesters = new JComboBox<>(values.keySet().toArray(new String[values.keySet().size()]));
+                JComboBox<Semester> semesters = new JComboBox<>(values.keySet().toArray(new Semester[values.keySet().size()]));
                 semesters.setSelectedItem(null);
-                JComboBox<String> courses = new JComboBox<>(new DefaultComboBoxModel<>());
+                JComboBox<Course> courses = new JComboBox<>(new DefaultComboBoxModel<>());
 
                 semesters.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String value = (String) semesters.getSelectedItem();
-                        List<String> secondValues = values.get(value);
+                        List<Course> secondValues = values.get(value);
 
                         DefaultComboBoxModel model = (DefaultComboBoxModel) courses.getModel();
                         model.removeAllElements();
-                        for (String s : secondValues) {
-                            model.addElement(s);
+                        for (Course c : secondValues) {
+                            model.addElement(c);
                         }
                     }
                 });
@@ -124,7 +130,10 @@ public class SelectCoursePage extends JFrame {
                 });
 
                 enter.addActionListener(e -> {
-                    new MainPage();
+                    if (courses.getSelectedItem() != null) {
+                        int courseId = ((Course) courses.getSelectedItem()).getId();
+                        new MainPage(courseId);
+                    }
                 });
 
                 add.addActionListener(e -> {
