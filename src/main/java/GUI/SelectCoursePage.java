@@ -144,8 +144,7 @@ public class SelectCoursePage extends JFrame {
                 });
 
                 templateManage.addActionListener(e -> {
-                    //TODO: pass the list of template into the page
-                    //TemplateManagementPage templateManagementPage = new TemplateManagementPage();
+                    TemplateManagementPage templateManagementPage = new TemplateManagementPage();
                 });
             }
         });
