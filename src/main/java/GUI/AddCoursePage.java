@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 
 public class AddCoursePage extends JFrame {
@@ -51,12 +52,16 @@ public class AddCoursePage extends JFrame {
         Template T2 = new Template("template 2", "{Homework, Exam}",
                 "{50, 50}", "3", "{30, 30, 30}", "100");
 
-        semesterInput.addItem(fall2019);
-        semesterInput.addItem(spring2019);
-        semesterInput.addItem(spring2020);
+        List<Template> templateList = databaseManager.getTemplate();
+        List<Semester> semesterList = databaseManager.getAllSemester();
 
-        templateInput.addItem(T1);
-        templateInput.addItem(T2);
+        for (Semester s : semesterList) {
+            semesterInput.addItem(s);
+        }
+
+        for (Template t : templateList) {
+            templateInput.addItem(t);
+        }
         templateInput.setSelectedItem(null);
 
         labels.setLayout(new GridLayout(3, 1));
