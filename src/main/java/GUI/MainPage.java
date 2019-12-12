@@ -482,6 +482,6 @@ public class MainPage extends JFrame {
     }
 
     public static void main(String[] args) {
-        MainPage mainPage = new MainPage(0);
+        MainPage mainPage = new MainPage(1);
     }
 }

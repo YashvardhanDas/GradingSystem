@@ -3,7 +3,6 @@ package TableModels;
 import DatabaseManager.DatabaseManager;
 import Entities.Grades;
 import Entities.Student;
-import com.sun.tools.javac.util.JCDiagnostic;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
