@@ -1,27 +1,34 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
+import Entities.Assignment;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 
 public class DeleteAssignmentPage extends JFrame {
     JPanel label = new JPanel();
     JPanel courseList = new JPanel();
     JPanel buttons = new JPanel();
 
-    static String[] assignments;
     JLabel courseLabel = new JLabel("Assignments: ");
-
-
     JButton delete = new JButton("Delete");
     JButton logout = new JButton("Back");
+    private DatabaseManager databaseManager = new DatabaseManager();
+    private int courseId;
 
 
-    public DeleteAssignmentPage() {
-        assignments = new String[] {"Homework1", "Homework2", "Midterm", "Final Exam", "Project1", "Project2"};
-        JComboBox courses = new JComboBox(assignments);
+    public DeleteAssignmentPage(int courseId) {
+        this.courseId = courseId;
+        List<Assignment> assignments = databaseManager.getAllAssignments();
+        JComboBox courses = new JComboBox();
+        for (Assignment a : assignments) {
+            courses.addItem(a);
+        }
         courses.setPreferredSize(new Dimension(350, 30));
         Container contentPane = this.getContentPane();
 
@@ -69,9 +76,15 @@ public class DeleteAssignmentPage extends JFrame {
         logout.addActionListener(e -> {
             dispose();
         });
+
+        delete.addActionListener(e -> {
+            Assignment assignmentToDelete = (Assignment) courses.getSelectedItem();
+            databaseManager.remove(assignmentToDelete);
+            new MainPage(courseId);
+        });
     }
 
     public static void main(String[] args) {
-        DeleteAssignmentPage deleteAssignmentPage = new DeleteAssignmentPage();
+        DeleteAssignmentPage deleteAssignmentPage = new DeleteAssignmentPage(0);
     }
 }

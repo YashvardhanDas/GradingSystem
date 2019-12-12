@@ -80,7 +80,7 @@ public class StudentTableModel extends AbstractTableModel {
                 students.get(rowIndex).setComment((String) aValue);
                 break;
         }
-        // TODO: 2019-12-10 add database function 
+        updateStudent(rowIndex);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class StudentTableModel extends AbstractTableModel {
     public void deleteRow(int rowIndex) {
         students.remove(rowIndex);
         fireTableDataChanged();
-        // TODO: 2019-12-10  add database function
+        databaseManager.remove(students.get(rowIndex));
     }
 
     public void changeFreeze(int rowIndex) {
@@ -105,9 +105,14 @@ public class StudentTableModel extends AbstractTableModel {
         } else {
             students.get(rowIndex).setFreezed(true);
         }
+        updateStudent(rowIndex);
     }
 
     public boolean getFreeze(int rowIndex) {
         return students.get(rowIndex).isFreezed();
+    }
+
+    private void updateStudent(int rowIndex) {
+        databaseManager.update(students.get(rowIndex));
     }
 }

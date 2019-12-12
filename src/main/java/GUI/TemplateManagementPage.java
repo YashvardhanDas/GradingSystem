@@ -109,7 +109,7 @@ public class TemplateManagementPage extends JFrame{
     }
     public static void main(String[] args) {
         List<Template> list = new ArrayList<>();
-        Template temp = new Template("template 1", "{Homework, Exam}", "{50, 50}", "3", "{30, 30, 30}");
+        Template temp = new Template("template 1", "{Homework, Exam}", "{50, 50}", "3", "{30, 30, 30}", "");
 
         list.add(temp);
 
