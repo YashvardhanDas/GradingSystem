@@ -36,6 +36,7 @@ public class AddCoursePage extends JFrame {
     public static String semesterName;
 
     private DatabaseManager databaseManager = new DatabaseManager();
+    private String path = "";
 
     public AddCoursePage(){
         Container contentPane = this.getContentPane();
@@ -98,7 +99,6 @@ public class AddCoursePage extends JFrame {
         });
 
         load.addActionListener(e -> {
-            String path = "";
             JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
             int returnValue = jfc.showOpenDialog(this);
@@ -108,14 +108,17 @@ public class AddCoursePage extends JFrame {
                 File selectedFile = jfc.getSelectedFile();
                 path = selectedFile.getAbsolutePath();
             }
+            System.out.println(path);
+        });
 
+        next.addActionListener(e -> {
             if (path.equals("") && templateInput.getSelectedItem() == null) {
-                 Course newCourse = new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem());
-                 databaseManager.add(newCourse);
+                Course newCourse = new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem());
+                databaseManager.add(newCourse);
             } else {
                 if (templateInput.getSelectedItem() == null && !path.equals("")) {
                     databaseManager.createCourseFromCsv( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
-                    , path);
+                            , path);
                 } else {
                     databaseManager.createCourseByTemplate((Template)templateInput.getSelectedItem(), nameInput.getText(),
                             (Semester) semesterInput.getSelectedItem(), path);
