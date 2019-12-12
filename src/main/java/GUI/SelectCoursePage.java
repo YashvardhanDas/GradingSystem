@@ -56,7 +56,7 @@ public class SelectCoursePage extends JFrame {
                 semestersBox.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String value = (String) semestersBox.getSelectedItem();
+                        Semester value = (Semester) semestersBox.getSelectedItem();
                         List<Course> secondValues = values.get(value);
 
                         DefaultComboBoxModel model = (DefaultComboBoxModel) courses.getModel();
