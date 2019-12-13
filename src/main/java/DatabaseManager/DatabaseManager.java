@@ -8,6 +8,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -374,5 +375,32 @@ public class DatabaseManager {
             grades.setGrade(result);
         }
         update(grades);
+    }
+
+    public void exportToCsv(Course course, String csvPath) throws IOException {
+        FileWriter csvWriter = new FileWriter(csvPath);
+        csvWriter.append("Name,");
+        for(int i = 0;i<course.getStudents().get(0).getGrades().size();i++){
+            if(course.getStudents().get(0).getGrades().size()==i+1){
+                csvWriter.append(course.getStudents().get(0).getGrades().get(i).getAssignment().getName());
+            }else{
+                csvWriter.append(course.getStudents().get(0).getGrades().get(i).getAssignment().getName()+",");
+            }
+        }
+        csvWriter.append("\n");
+
+        for(int i = 0; i< course.getStudents().size();i++){
+            csvWriter.append(course.getStudents().get(i).toString()+",");
+            for(int j = 0;j<course.getStudents().get(i).getGrades().size();j++){
+                if(course.getStudents().get(i).getGrades().size()==j+1){
+                    csvWriter.append(course.getStudents().get(i).getGrades().get(j).toString());
+                }else{
+                    csvWriter.append(course.getStudents().get(i).getGrades().get(j).toString()+",");
+                }
+            }
+            csvWriter.append("\n");
+        }
+        csvWriter.flush();
+        csvWriter.close();
     }
 }

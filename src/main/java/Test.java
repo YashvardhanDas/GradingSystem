@@ -2,12 +2,13 @@ import DatabaseManager.DatabaseManager;
 import Entities.*;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         DatabaseManager db = new DatabaseManager();
 //        Semester sem=new Semester("Fall_2019");
 //         Test Data
@@ -104,10 +105,11 @@ public class Test {
 //        db.add(midterm);
 //        db.add(finalExam);
 
-        Course course =db.findCourse(1);
+        Course course =db.findCourse(2);
 
 //        Student stud1 = new GraduateStudent("Yernur","Alimkhanov","1","Yernura",course);
 //        db.addStudent(stud1);
-        db.createTemplate(course,"testTemplate");
+//        db.createTemplate(course,"testTemplate");
+        db.exportToCsv(course,"C:\\Users\\Сулпак\\Desktop\\BOSTON MASTER\\Java\\test.csv");
     }
 }
