@@ -1,6 +1,8 @@
 package TableModels;
 
 import java.util.*;
+
+import DatabaseManager.DatabaseManager;
 import Entities.Template;
 
 import javax.swing.table.AbstractTableModel;
@@ -22,7 +24,6 @@ public class TemplateTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        //TODO: get comlumn count from template class
         return colNameList.size();
     }
 
@@ -64,10 +65,17 @@ public class TemplateTableModel extends AbstractTableModel {
             template.setAssignTotalScore(value);
         }
 
+        //updateDatabase(template);
+
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
+    }
+
+    private void updateDatabase(Template template) {
+        DatabaseManager db = new DatabaseManager();
+        db.update(template);
     }
 }
