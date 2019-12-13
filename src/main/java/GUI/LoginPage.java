@@ -5,70 +5,105 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class LoginPage extends JFrame {
-    private JLabel label1;
-    private JLabel label2;
-
-    private JLabel cardNum;
-    private JLabel password;
-    private JTextField cardNumText;
-    private JPasswordField pswText;
-    private JButton login;
-
-    // Constructor
-    public LoginPage() {
-
-        label1 = new JLabel("Grading System");
-        Font labelFont1 = new Font(Font.DIALOG,  Font.BOLD, 30);
-        label1.setFont(labelFont1);
-
-        label2 = new JLabel("Welcome, Christine!");
-        Font labelFont2 = new Font(Font.DIALOG,  Font.BOLD, 20);
-        label2.setFont(labelFont2);
-
-        cardNum = new JLabel("Username:");
-        password = new JLabel("Password:");
-        cardNumText = new JTextField();
-        pswText = new JPasswordField();
-        login = new JButton("Log in");
-
-        label1.setBounds(30,10, 300, 50);
-        label2.setBounds(45, 70, 300, 50);
-        cardNum.setBounds(10, 130, 300, 30);
-        cardNumText.setBounds(10, 170, 300, 30);
-        password.setBounds(10, 210, 300, 30);
-        pswText.setBounds(10, 250, 300, 30);
-        login.setBounds(60, 310, 200, 50);
+    JButton login = new JButton("Login");
+    JLabel log = new JLabel("Grading System");
 
 
+    JLabel userName = new JLabel("username：");
+    JLabel passWord = new JLabel("password: ");
+    JTextField inputUserName = new JTextField();
+    JPasswordField inputPassWord = new JPasswordField();
 
-        // Create the panel to place the buttons on
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
+    JLabel img = new JLabel();
 
-        // Add each button to the panel
-        panel.add(label1);
-        panel.add(label2);
-        panel.add(login);
-        panel.add(cardNum);
-        panel.add(cardNumText);
-        panel.add(password);
-        panel.add(pswText);
-        panel.add(login);
+    String[] courseList;
 
-        // Add the panel to the frame
-        add(panel);
+    JSeparator jSeparator = new JSeparator();
 
-        // Initialize frame information
-        setTitle( "Welcome" );
-        setSize( 320, 570 );
-        setLocation( 200, 100 );
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
 
-        // Turn it on
-        setVisible( true );
+    public LoginPage(){
+        Container contentPane = this.getContentPane();
+        contentPane.setLayout(null);
+
+        login.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        login.setLabel("Log in");
+        login.setForeground(Color.BLUE);
+
+
+        log.setFont(new java.awt.Font("Lucida Grande", 1, 30)); // NOI18N
+        log.setText("   Grading System");
+
+        jSeparator.setBackground(new java.awt.Color(0, 0, 0));
+
+        userName.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        userName.setText("Username: ");
+
+        passWord.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        passWord.setText("Password: ");
+
+        img.setIcon(new ImageIcon("BU logo.gif"));
+        img.setSize(200, 100);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 127, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(userName)
+                                        .addComponent(passWord))
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(inputUserName)
+                                        .addComponent(inputPassWord, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(105, 105, 105))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(26, 26, 26)
+                                                .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(26, 26, 26)
+                                                .addComponent(img)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(log, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(238, 238, 238)
+                                                .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(img, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(log, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(userName)
+                                        .addComponent(inputUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(passWord)
+                                        .addComponent(inputPassWord, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(47, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(640, 360);
+        setLocation(200, 100);
+        setTitle("Welcome");
+        setResizable(false);
+        setVisible(true);
 
         login.addActionListener(e -> {
-            if(cardNumText.getText().equals("cpk") && String.valueOf(pswText.getPassword()).equals("123456")) {
+            if(inputUserName.getText().equals("cpk") && String.valueOf(inputPassWord.getPassword()).equals("123456")) {
                 new SelectCoursePage();
                 dispose();
             }
@@ -78,12 +113,10 @@ public class LoginPage extends JFrame {
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
     }
+
 
     public static void main(String[] args) {
-        LoginPage loginPage = new LoginPage();
+        new LoginPage();
     }
-
-
 }
