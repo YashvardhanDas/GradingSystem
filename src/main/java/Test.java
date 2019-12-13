@@ -9,11 +9,12 @@ public class Test {
 
     public static void main(String[] args) {
         DatabaseManager db = new DatabaseManager();
-        Semester sem=new Semester("Fall_2019");
+//        Semester sem=new Semester("Fall_2019");
 //         Test Data
-        Template temp =db.findTemplate(1);
-        db.createCourseByTemplate(temp,"Check1",sem);
-
+//        Template temp =db.findTemplate(1);
+//       db.createCourseByTemplate(temp,"Check1",sem);
+//        Course course = db.findCourse(1);
+//        db.createTemplate(course,"TestTemplate");
 
 //        s1.setCourse(cs591p1);
 //        s2.setCourse(cs591p1);
@@ -79,5 +80,34 @@ public class Test {
 //        s2.setGrades(grades);
 //        s3.setGrades(grades);
 
+//        Semester semester = new Semester("Fall_2019");
+//
+//        Course course = new Course("CS 591 P1",semester);
+//
+//        Category category = new Category("Homework");
+//        Category category2 = new Category("Project");
+//        Category category3 = new Category("Exam");
+//
+//        CategoryPercent categoryPercent1 = new CategoryPercent(30.0,category,course);
+//        CategoryPercent categoryPercent2 = new CategoryPercent(50.0,category2,course);
+//        CategoryPercent categoryPercent3 = new CategoryPercent(20.0,category3,course);
+//
+//        Assignment hw1 = new Assignment(50.0,"HW1",categoryPercent1,50.0);
+//        Assignment hw2 = new Assignment(50.0,"HW1",categoryPercent1,100.0);
+//        Assignment pr = new Assignment(100.0,"Project",categoryPercent2,100.0);
+//        Assignment midterm = new Assignment(50.0,"Midterm",categoryPercent3,100.0);
+//        Assignment finalExam = new Assignment(50.0,"Final",categoryPercent3,100.0);
+//
+//        db.add(hw1);
+//        db.add(hw2);
+//        db.add(pr);
+//        db.add(midterm);
+//        db.add(finalExam);
+
+        Course course =db.findCourse(1);
+
+//        Student stud1 = new GraduateStudent("Yernur","Alimkhanov","1","Yernura",course);
+//        db.addStudent(stud1);
+        db.createTemplate(course,"testTemplate");
     }
 }

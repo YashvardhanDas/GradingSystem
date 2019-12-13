@@ -124,9 +124,11 @@ public class AddCoursePage extends JFrame {
                 if (templateInput.getSelectedItem() == null && !path.equals("")) {
                     databaseManager.createCourseFromCsv( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
                             , path);
-                } else {
+                } else if(templateInput.getSelectedItem() != null && path.equals("")) {
                     databaseManager.createCourseByTemplate((Template)templateInput.getSelectedItem(), nameInput.getText(),
-                            (Semester) semesterInput.getSelectedItem(), path);
+                            (Semester) semesterInput.getSelectedItem());
+                }else{
+                    databaseManager.createCourseByCsvAndTemplate( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem()),(Template)templateInput.getSelectedItem(),path);
                 }
 
             }
