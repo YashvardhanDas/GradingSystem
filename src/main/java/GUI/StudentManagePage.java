@@ -26,12 +26,13 @@ public class StudentManagePage extends JFrame {
 
     // Constructor
     public StudentManagePage(int courseId) {
+        Course course = databaseManager.findCourse(courseId);
 
         title = new JLabel("Student Management");
         Font labelFont1 = new Font(Font.DIALOG, Font.BOLD, 20);
         title.setFont(labelFont1);
 
-        className = new JLabel("CS 591P1 Fall 2019");
+        className = new JLabel(course.toString() + " " + course.getSemester().toString());
         Font labelFont2 = new Font(Font.DIALOG, Font.BOLD, 20);
         className.setFont(labelFont2);
 
@@ -43,7 +44,6 @@ public class StudentManagePage extends JFrame {
 
         separator = new JSeparator();
 
-        Course course = databaseManager.findCourse(courseId);
         this.students = course.getStudents();
 
 
