@@ -54,4 +54,10 @@ public class Category {
     public String toString() {
         return this.name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        String categoryName = (String) obj;
+        return this.name==categoryName;
+    }
 }

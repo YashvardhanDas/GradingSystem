@@ -81,5 +81,10 @@ public class CategoryPercent {
         else
             return "";
     }
+    @Override
+    public boolean equals(Object obj) {
+        String categoryName = (String) obj;
+        return this.getCategory().getName()==categoryName;
+    }
 
 }

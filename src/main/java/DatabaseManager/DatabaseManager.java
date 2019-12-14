@@ -117,6 +117,16 @@ public class DatabaseManager {
 
         return result;
     }
+    public CategoryPercent findCategoryPercentByName(String name){
+        CategoryPercent result = null;
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM CategoryPercent s WHERE s.category.name = :n");
+        q.setParameter("n",name);
+        result = (CategoryPercent) q.getSingleResult();
+        em.getTransaction().commit();
+
+        return result;
+    }
 
     public List<Assignment> getAllAssignments(){
         em.getTransaction().begin();
@@ -414,5 +424,31 @@ public class DatabaseManager {
         a.getStudents().remove(s);
         update(a);
     }
-    
+
+//    public void addCategory(int courseId, String category){
+//        Course course = findCourse(courseId);
+//        List<Category> categories = getAllCategories();
+//        if(!categories.contains(category)){
+//            Category tepm = new Category(category);
+//            CategoryPercent tempPercent = new CategoryPercent(0.0,tepm,course);
+//            course.getCategoryPercents().add(tempPercent);
+//            add(tempPercent);
+//            update(course);
+//        }else if(false){
+//
+//        }
+//    }
+
+    public void addAssignment(Assignment assignment, int courseId,Category category){
+        Course course = findCourse(courseId);
+        if(course.getCategoryPercents().contains(category.getName())){
+            CategoryPercent categoryPercent = findCategoryPercentByName(category.getName());
+            assignment.setCategoryPercent(categoryPercent);
+            addAssignment(assignment);
+        }else{
+            CategoryPercent categoryPercent = new CategoryPercent(0.0,category,course);
+            assignment.setCategoryPercent(categoryPercent);
+            addAssignment(assignment);
+        }
+    }
 }
