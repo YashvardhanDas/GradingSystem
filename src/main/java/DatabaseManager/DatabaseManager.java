@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    EntityManager em;
+    public EntityManager em;
 
     public DatabaseManager(){
         EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "GradingSystemProvider" );
@@ -201,10 +201,13 @@ public class DatabaseManager {
                 stud.getGrades().add(temp);
             }
         }
+        Course cour = stud.getCourse();
+        cour.getStudents().add(stud);
         em.getTransaction().begin();
         em.persist(stud);
         em.flush();
         em.getTransaction().commit();
+        update(cour);
     }
 
     public void addAssignment(Assignment assignment){
@@ -402,5 +405,14 @@ public class DatabaseManager {
         }
         csvWriter.flush();
         csvWriter.close();
+    }
+
+    public void removeStudentById(int id){
+        Student s = findStudent(id);
+        Course a = s.getCourse();
+        remove(s);
+        a.getStudents().remove(s);
+        update(a);
+
     }
 }
