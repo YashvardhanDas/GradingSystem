@@ -23,6 +23,8 @@ public class Course {
     @JoinColumn(name = "semester_id")
     private Semester semester;
 
+    double curveValue=0.0;
+
     public Course() {
     }
 
@@ -75,6 +77,14 @@ public class Course {
 
     public void setSemester(Semester semester) {
         this.semester = semester;
+    }
+
+    public double getCurveValue() {
+        return curveValue;
+    }
+
+    public void setCurveValue(double curveValue) {
+        this.curveValue = curveValue;
     }
 
     @Override
