@@ -80,6 +80,8 @@ public class DeleteAssignmentPage extends JFrame {
         delete.addActionListener(e -> {
             Assignment assignmentToDelete = (Assignment) courses.getSelectedItem();
             databaseManager.remove(assignmentToDelete);
+            JOptionPane.showMessageDialog(null,"Success!");
+            dispose();
             new MainPage(courseId);
         });
     }

@@ -101,6 +101,7 @@ public class AddCoursePage extends JFrame {
 
         cancel.addActionListener(e -> {
             dispose();
+            new SelectCoursePage();
         });
 
         load.addActionListener(e -> {
@@ -117,20 +118,27 @@ public class AddCoursePage extends JFrame {
         });
 
         next.addActionListener(e -> {
-            if (path.equals("") && templateInput.getSelectedItem() == null) {
-                Course newCourse = new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem());
-                databaseManager.add(newCourse);
+            if (nameInput.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null,"Please fill all the blank!");
             } else {
-                if (templateInput.getSelectedItem() == null && !path.equals("")) {
-                    databaseManager.createCourseFromCsv( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
-                            , path);
-                } else if(templateInput.getSelectedItem() != null && path.equals("")) {
-                    databaseManager.createCourseByTemplate((Template)templateInput.getSelectedItem(), nameInput.getText(),
-                            (Semester) semesterInput.getSelectedItem());
-                }else{
-                    databaseManager.createCourseByCsvAndTemplate( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem()),(Template)templateInput.getSelectedItem(),path);
-                }
+                if (path.equals("") && templateInput.getSelectedItem() == null) {
+                    Course newCourse = new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem());
+                    databaseManager.add(newCourse);
+                } else {
+                    if (templateInput.getSelectedItem() == null && !path.equals("")) {
+                        databaseManager.createCourseFromCsv( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem())
+                                , path);
+                    } else if(templateInput.getSelectedItem() != null && path.equals("")) {
+                        databaseManager.createCourseByTemplate((Template)templateInput.getSelectedItem(), nameInput.getText(),
+                                (Semester) semesterInput.getSelectedItem());
+                    }else{
+                        databaseManager.createCourseByCsvAndTemplate( new Course(nameInput.getText(), (Semester) semesterInput.getSelectedItem()),(Template)templateInput.getSelectedItem(),path);
+                    }
 
+                }
+                JOptionPane.showMessageDialog(null,"Success!");
+                dispose();
+                new SelectCoursePage();
             }
         });
 

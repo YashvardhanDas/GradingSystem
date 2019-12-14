@@ -333,14 +333,17 @@ public class MainPage extends JFrame {
 
         back.addActionListener(e -> {
             dispose();
+            new SelectCoursePage();
         });
 
         studentManagement.addActionListener(e -> {
-            StudentManagePage studentManagePage = new StudentManagePage();
+            StudentManagePage studentManagePage = new StudentManagePage(courseId);
+            dispose();
         });
 
         deleteAssignment.addActionListener(e -> {
             DeleteAssignmentPage deleteAssignmentPage = new DeleteAssignmentPage(courseId);
+            dispose();
         });
 
         courseStructure.addActionListener(e -> {

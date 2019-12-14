@@ -136,11 +136,13 @@ public class SelectCoursePage extends JFrame {
                     if (courses.getSelectedItem() != null) {
                         int courseId = ((Course) courses.getSelectedItem()).getId();
                         new MainPage(courseId);
+                        dispose();
                     }
                 });
 
                 add.addActionListener(e -> {
                     new AddCoursePage();
+                    dispose();
                 });
 
                 templateManage.addActionListener(e -> {

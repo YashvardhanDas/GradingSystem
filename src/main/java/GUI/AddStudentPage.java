@@ -30,11 +30,10 @@ public class AddStudentPage extends JFrame {
     JRadioButton under = new JRadioButton("Undergraduate");
     JButton confirm = new JButton("Confirm");
     JButton ret = new JButton("Cancel");
-    private Course course;
     private DatabaseManager databaseManager = new DatabaseManager();
 
-    public AddStudentPage(Course course){
-        this.course = course;
+    public AddStudentPage(int courseId){
+        Course course = databaseManager.findCourse(courseId);
 
         Container contentPane = this.getContentPane();
         contentPane.setLayout(null);
@@ -81,6 +80,7 @@ public class AddStudentPage extends JFrame {
 
         ret.addActionListener(e -> {
             dispose();
+            new StudentManagePage(courseId);
         });
 
         confirm.addActionListener(e -> {
@@ -101,7 +101,11 @@ public class AddStudentPage extends JFrame {
                 } else {
                     newStudent = new UndergraduateStudent(studentFName, studentLName, studentID, studentEmail, course);
                 }
+                newStudent.setCourse(course);
                 databaseManager.addStudent(newStudent);
+                JOptionPane.showMessageDialog(null,"Success!");
+                dispose();
+                new StudentManagePage(courseId);
             }
         });
     }
