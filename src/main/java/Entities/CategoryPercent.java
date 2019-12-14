@@ -75,7 +75,11 @@ public class CategoryPercent {
 
     @Override
     public String toString() {
-        return String.valueOf(this.percent);
+        if (this.category != null) {
+            return this.category.getName();
+        }
+        else
+            return "";
     }
 
 }

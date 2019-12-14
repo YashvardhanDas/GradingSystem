@@ -55,8 +55,10 @@ public class CourseStructureTableModel extends AbstractTableModel {
             assignment.setName(value);
         }
         //percentage
-        else {
+        else if (columnIndex == 1){
             assignment.setPercent(Double.parseDouble(value));
+        } else {
+            assignment.setTotalScore(Double.parseDouble(value));
         }
 
         updateDatabase(assignment);

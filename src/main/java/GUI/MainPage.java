@@ -347,7 +347,7 @@ public class MainPage extends JFrame {
         });
 
         courseStructure.addActionListener(e -> {
-            CourseStructurePage courseStructurePage = new CourseStructurePage();
+            CourseStructurePage courseStructurePage = new CourseStructurePage(courseId, null);
         });
 
         addAssignment.addActionListener(e -> {
