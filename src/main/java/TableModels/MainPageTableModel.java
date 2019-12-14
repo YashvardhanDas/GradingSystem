@@ -60,18 +60,32 @@ public class MainPageTableModel extends AbstractTableModel {
                             "Input should be numbers!",
                             "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
+                    // input is numbers
                     String colName = columnNames.get(columnIndex);
                     if (!(colName.equals("Student Name") || colName.equals("Total"))) {
+                        // if grade is being edit
+                        Grades grade = (Grades) students.get(rowIndex).get(columnIndex);
                         double doubleValue = Double.valueOf((String) aValue);
-                        if (doubleValue <= 0) {
-                            doubleValue = ((Grades) students.get(rowIndex).get(columnIndex)).getAssignment().getTotalScore()
-                                    + doubleValue;
+                        if (doubleValue > 100 || doubleValue < -1 * grade.getAssignment().getTotalScore()) {
+                            // if the input is more than 100 or less than -1 * total grade
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid input!",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            double totalScore = grade.getAssignment().getTotalScore();
+                            if (doubleValue <= 0) {
+                                // deduction scoring method
+                                doubleValue = (totalScore + doubleValue) / totalScore;
+                            } else {
+                                // percent scoring method
+                                doubleValue = doubleValue / 100;
+                            }
+                            ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
+                            ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);
+                            studentEntities.get(rowIndex).getGrades().get(columnIndex - 1).setGrade(doubleValue);
+                            studentEntities.get(rowIndex).getGrades().get(columnIndex - 1).setGraded(true);
+                            updateTotalGrade(rowIndex);
                         }
-                        ((Grades) students.get(rowIndex).get(columnIndex)).setGrade(doubleValue);
-                        ((Grades) students.get(rowIndex).get(columnIndex)).setGraded(true);
-                        studentEntities.get(rowIndex).getGrades().get(columnIndex - 1).setGrade(doubleValue);
-                        studentEntities.get(rowIndex).getGrades().get(columnIndex - 1).setGraded(true);
-                        updateTotalGrade(rowIndex);
                     }
                 }
             }
