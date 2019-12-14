@@ -65,7 +65,7 @@ public class TemplateTableModel extends AbstractTableModel {
             template.setAssignTotalScore(value);
         }
 
-        //updateDatabase(template);
+        updateDatabase(template);
 
     }
 

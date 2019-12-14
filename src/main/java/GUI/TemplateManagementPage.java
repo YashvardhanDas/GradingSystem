@@ -33,26 +33,26 @@ public class TemplateManagementPage extends JFrame{
     TemplateTableModel templateSheet;
     JTable tSheet;
 
-    //DatabaseManager db= new DatabaseManager();
+    DatabaseManager db= new DatabaseManager();
 
     public TemplateManagementPage() {
 
         //TODO db action here
-        //List<Template> templateList = db.getTemplate();
-        //List<Course> listc = db.getAllCourses();
+        List<Template> templateList = db.getTemplate();
+        List<Course> listc = db.getAllCourses();
 
 
 
         //Start of the fake data part
         //Starting here is the fake data part
         //to be switched by reading from databse
-        List<Template> list = new ArrayList<>();
-        Template temp = new Template("template 1", "{Homework, Exam}", "{50, 50}", "3", "{30, 30, 30}", "100");
-        list.add(temp);
-        List<Course> listc = new ArrayList<>();
-        Course course = new Course("course 591", new Semester());
-        listc.add(course);
-        List<Template> templateList = list;
+//        List<Template> list = new ArrayList<>();
+//        Template temp = new Template("template 1", "{Homework, Exam}", "{50, 50}", "3", "{30, 30, 30}", "100");
+//        list.add(temp);
+//        List<Course> listc = new ArrayList<>();
+//        Course course = new Course("course 591", new Semester());
+//        listc.add(course);
+//        List<Template> templateList = list;
 
         //Ending the fake data part
 
@@ -120,7 +120,7 @@ public class TemplateManagementPage extends JFrame{
                     Course fromCourse = (Course)course.getSelectedItem();
 
                     //TODO db action here
-                    //db.createTemplate(fromCourse, name);
+                    db.createTemplate(fromCourse, name);
 
                     tSheet.repaint();
                 });
@@ -129,7 +129,7 @@ public class TemplateManagementPage extends JFrame{
                     Template toDelete = (Template)templateBox.getSelectedItem();
 
                     //TODO db delete template
-                    //db.remove(toDelete);
+                    db.remove(toDelete);
 
                     tSheet.repaint();
                 });
