@@ -41,8 +41,12 @@ public class CourseStructureTableModel extends AbstractTableModel {
         Assignment assignment =  assignmentList.get(rowIndex);
         if (columnIndex == 0)
             return assignment.getName();
-        else
-            return assignment.getCategoryPercent();
+        else if(columnIndex==1){
+            return assignment.getPercent();
+        }else{
+            return assignment.getTotalScore();
+        }
+
     }
 
     @Override

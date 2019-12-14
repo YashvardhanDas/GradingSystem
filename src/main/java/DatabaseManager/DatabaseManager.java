@@ -413,6 +413,6 @@ public class DatabaseManager {
         remove(s);
         a.getStudents().remove(s);
         update(a);
-
     }
+    
 }
