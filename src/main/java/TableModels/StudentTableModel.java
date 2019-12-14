@@ -94,9 +94,12 @@ public class StudentTableModel extends AbstractTableModel {
     }
 
     public void deleteRow(int rowIndex) {
+
+        Student s = students.get(rowIndex);
+        databaseManager.removeStudentById(s.getId());
         students.remove(rowIndex);
         fireTableDataChanged();
-        databaseManager.remove(students.get(rowIndex));
+
     }
 
     public void changeFreeze(int rowIndex) {

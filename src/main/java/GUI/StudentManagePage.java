@@ -27,7 +27,7 @@ public class StudentManagePage extends JFrame {
     // Constructor
     public StudentManagePage(int courseId) {
         Course course = databaseManager.findCourse(courseId);
-
+        System.out.println(course.getStudents().size()+"!!!!!!!!!!!!");
         title = new JLabel("Student Management");
         Font labelFont1 = new Font(Font.DIALOG, Font.BOLD, 20);
         title.setFont(labelFont1);
@@ -238,4 +238,7 @@ public class StudentManagePage extends JFrame {
 
     }
 
+    public static void main(String[] args) {
+        StudentManagePage temp = new StudentManagePage(2);
+    }
 }
