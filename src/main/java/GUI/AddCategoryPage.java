@@ -67,8 +67,25 @@ public class AddCategoryPage extends JFrame{
 
                 updatePer.addActionListener(e -> {
                     String s = percentage.getText();
-                    //DatabaseManager db = new DatabaseManager();
-                    //db.createCategory(courseID, s);
+                    boolean flag = true;
+
+                    //TODO: uncomment this part for db
+                    /*
+                    DatabaseManager db = new DatabaseManager();
+                    List<Category> list = db.getCategory();
+                    for (Category cat : list) {
+                        if (cat.getName().equals(s)) {
+                            flag = false;
+                            break;
+                        }
+                    }
+
+
+                    if (flag)
+                    db.createCategory(courseID, s);
+
+                     */
+
                 });
 
 

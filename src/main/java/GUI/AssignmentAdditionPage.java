@@ -1,5 +1,6 @@
 package GUI;
 
+import DatabaseManager.DatabaseManager;
 import Entities.Assignment;
 import Entities.Category;
 
@@ -23,16 +24,21 @@ public class AssignmentAdditionPage extends JFrame {
     ButtonGroup G = new ButtonGroup();
 
     JButton back = new JButton("Back");
-    JButton finish = new JButton("Finish");
+    JButton finish = new JButton("Create");
     JTextField assignmentField = new JTextField();
     JTextField scoreField = new JTextField();
     JRadioButton percentage = new JRadioButton("Percentage");
     JRadioButton deduction = new JRadioButton("Deduction");
 
+    JButton addCat = new JButton("Add Category");
 
 
 
-    public AssignmentAdditionPage() {
+    public AssignmentAdditionPage(int courseID) {
+
+        //TODO: uncomment this part for db get data
+        //DatabaseManager db = new DatabaseManager();
+        //List<Category> listCatagory = db.getAllCategories();
 
         //Start of the fake data part
         //Starting here is the fake data part
@@ -73,6 +79,7 @@ public class AssignmentAdditionPage extends JFrame {
                 totalScore.setBounds(40, 130, 140, 30);
                 assignmentField.setBounds(200, 50, 200, 30);
                 category.setBounds(200, 90, 200, 30);
+                addCat.setBounds(450, 90, 150, 30);
                 scoreField.setBounds(200, 130, 50, 30);
                 scoringMethods.setBounds(300, 130, 150, 30);
                 percentage.setBounds(450, 130, 150, 30);
@@ -91,6 +98,7 @@ public class AssignmentAdditionPage extends JFrame {
                 add(deduction);
                 add(finish);
                 add(back);
+                add(addCat);
                 G.add(percentage);
                 G.add(deduction);
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -102,6 +110,10 @@ public class AssignmentAdditionPage extends JFrame {
 
                 back.addActionListener(e -> {
                     dispose();
+                });
+
+                addCat.addActionListener(e -> {
+                    AddCategoryPage addCategoryPage = new AddCategoryPage(courseID);
                 });
 
 
@@ -128,8 +140,11 @@ public class AssignmentAdditionPage extends JFrame {
                     }
                     else {
                         Assignment newAssignment;
-                        int score = Integer.parseInt(assignmentScore);
-                        newAssignment = new Assignment(score, assignmentName, null,0.0);
+                        double score = Double.parseDouble(assignmentScore);
+                        Category cat = (Category)category.getSelectedItem();
+
+                        System.out.println("create a new assignment with name " + assignmentName + " category " + cat.getName() + " total score " + score);
+                        newAssignment = new Assignment(0.0, assignmentName, null,score);
                     }
 
                 });
@@ -139,6 +154,6 @@ public class AssignmentAdditionPage extends JFrame {
     }
 
     public static void main(String[] args) {
-        AssignmentAdditionPage assignmentAdditionPage = new AssignmentAdditionPage();
+        AssignmentAdditionPage assignmentAdditionPage = new AssignmentAdditionPage(0);
     }
 }
