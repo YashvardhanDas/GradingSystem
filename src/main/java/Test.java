@@ -106,6 +106,7 @@ public class Test {
 //        db.add(finalExam);
 
         Course course =db.findCourse(2);
+        System.out.println(course);
 
 //        Student stud1 = new GraduateStudent("Yernur","Alimkhanov","1","Yernura",course);
 //        db.addStudent(stud1);
