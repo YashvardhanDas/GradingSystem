@@ -217,7 +217,7 @@ public class MainPage extends JFrame {
         columnToIndex.get("Total").add(index + 1);
         columnToIndex.get("Letter Grade").add(index + 2);
 
-        MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList, this.students);
+        MainPageTableModel mainPageTableModel = new MainPageTableModel(columnNames, rowDataList, this.students, courseId);
 
         //table = new JTable(mainPageTableModel);
         table = new JTable(mainPageTableModel);
@@ -351,7 +351,7 @@ public class MainPage extends JFrame {
         });
 
         addAssignment.addActionListener(e -> {
-            AssignmentAdditionPage assignmentAdditionPage = new AssignmentAdditionPage();
+            AssignmentAdditionPage assignmentAdditionPage = new AssignmentAdditionPage(courseId);
         });
 
         curve.addActionListener(e -> {
@@ -363,9 +363,15 @@ public class MainPage extends JFrame {
                             "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     double doubleValue = Double.valueOf(stringValue);
-                    updateStatistics();
-                    ((MainPageTableModel)table.getModel()).curveTotalGrade(doubleValue);
-                    table.repaint();
+                    if (doubleValue < -100 || doubleValue > 100) {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid number!",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        updateStatistics();
+                        ((MainPageTableModel)table.getModel()).curveTotalGrade(doubleValue / 100);
+                        table.repaint();
+                    }
                 }
             }
         });

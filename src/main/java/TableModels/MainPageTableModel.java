@@ -1,6 +1,7 @@
 package TableModels;
 
 import DatabaseManager.DatabaseManager;
+import Entities.Course;
 import Entities.Grades;
 import Entities.Student;
 
@@ -16,12 +17,15 @@ public class MainPageTableModel extends AbstractTableModel {
     private List<String> columnNames;
     private List<Student> studentEntities;
     private DatabaseManager databaseManager = new DatabaseManager();
+    private Course course;
 
 
-    public MainPageTableModel(List<String> columnNames, List<List<Object>> students, List<Student> studentEntities) {
+    public MainPageTableModel(List<String> columnNames, List<List<Object>> students,
+                              List<Student> studentEntities, int courseId) {
         this.students = students;
         this.columnNames = columnNames;
         this.studentEntities = studentEntities;
+        this.course = databaseManager.findCourse(courseId);
         for (int i = 0; i < students.size(); i++) {
             updateTotalGrade(i);
         }
@@ -69,11 +73,11 @@ public class MainPageTableModel extends AbstractTableModel {
                         if (doubleValue > 100 || doubleValue < -1 * grade.getAssignment().getTotalScore()) {
                             // if the input is more than 100 or less than -1 * total grade
                             JOptionPane.showMessageDialog(null,
-                                    "Invalid input!",
+                                    "Invalid number!",
                                     "Error", JOptionPane.ERROR_MESSAGE);
                         } else {
                             double totalScore = grade.getAssignment().getTotalScore();
-                            if (doubleValue <= 0) {
+                            if (doubleValue < 0) {
                                 // deduction scoring method
                                 doubleValue = (totalScore + doubleValue) / totalScore;
                             } else {
@@ -103,19 +107,20 @@ public class MainPageTableModel extends AbstractTableModel {
                 sum += ((Grades) o).getGrade() * categoryPercent * assignmentPercent;
             }
         }
+        sum += course.getCurveValue();
         students.get(rowIndex).set(columnNames.size() - 2, sum);
         studentEntities.get(rowIndex).setTotalGrade(sum);
     }
 
     public void curveTotalGrade(double curveGrade) {
+        course.setCurveValue(course.getCurveValue() + curveGrade);
         int rowIndex = 0;
         for (List<Object> row : students) {
-            double newGrade = (double) row.get(columnNames.size() - 2) + curveGrade;
-            row.set(columnNames.size() - 2, newGrade);
-            studentEntities.get(rowIndex).setTotalGrade(newGrade);
+            updateTotalGrade(rowIndex);
             rowIndex++;
         }
         updateDatabase();
+        databaseManager.update(course);
     }
 
     @Override
