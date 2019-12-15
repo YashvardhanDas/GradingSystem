@@ -70,9 +70,9 @@ public class AddCategoryPage extends JFrame{
                     boolean flag = true;
 
                     //TODO: uncomment this part for db
-                    /*
+
                     DatabaseManager db = new DatabaseManager();
-                    List<Category> list = db.getCategory();
+                    List<Category> list = db.getAllCategories();
                     for (Category cat : list) {
                         if (cat.getName().equals(s)) {
                             flag = false;
@@ -81,10 +81,12 @@ public class AddCategoryPage extends JFrame{
                     }
 
 
-                    if (flag)
-                    db.createCategory(courseID, s);
+                    if (flag) {
+                        Category newCat = new Category(s);
+                        db.add(newCat);
+                    }
 
-                     */
+
 
                 });
 

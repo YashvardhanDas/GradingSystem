@@ -37,17 +37,17 @@ public class AssignmentAdditionPage extends JFrame {
     public AssignmentAdditionPage(int courseID) {
 
         //TODO: uncomment this part for db get data
-        //DatabaseManager db = new DatabaseManager();
-        //List<Category> listCatagory = db.getAllCategories();
+        DatabaseManager db = new DatabaseManager();
+        List<Category> listCatagory = db.getAllCategories();
 
         //Start of the fake data part
         //Starting here is the fake data part
         //to be switched by reading from databse
-        List<Category> listCatagory = new ArrayList<>();
-        Category cate1 = new Category("homework");
-        Category cate2 = new Category("quiz");
-        listCatagory.add(cate1);
-        listCatagory.add(cate2);
+//        List<Category> listCatagory = new ArrayList<>();
+//        Category cate1 = new Category("homework");
+//        Category cate2 = new Category("quiz");
+//        listCatagory.add(cate1);
+//        listCatagory.add(cate2);
 
         //Ending the fake data part
 
@@ -143,8 +143,9 @@ public class AssignmentAdditionPage extends JFrame {
                         double score = Double.parseDouble(assignmentScore);
                         Category cat = (Category)category.getSelectedItem();
 
-                        System.out.println("create a new assignment with name " + assignmentName + " category " + cat.getName() + " total score " + score);
+                        //System.out.println("create a new assignment with name " + assignmentName + " category " + cat.getName() + " total score " + score);
                         newAssignment = new Assignment(0.0, assignmentName, null,score);
+                        db.addAssignment(newAssignment, courseID, cat);
                     }
 
                 });
