@@ -16,6 +16,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -373,6 +374,16 @@ public class MainPage extends JFrame {
                         table.repaint();
                     }
                 }
+            }
+        });
+
+        export.addActionListener(e -> {
+            try {
+                databaseManager.exportToCsv(course, "C:\\Users\\Сулпак\\Desktop\\BOSTON MASTER\\Java\\test.csv");
+            } catch (IOException exception) {
+                JOptionPane.showMessageDialog(null,
+                        "Fail!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 

@@ -158,6 +158,7 @@ public class TemplateManagementPage extends JFrame{
                 add(cancel);
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 setSize(700, 550);
+                setLocation(200, 100);
                 setTitle("Course Structure");
                 setResizable(false);
                 setVisible(true);
