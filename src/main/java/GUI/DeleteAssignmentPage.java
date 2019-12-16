@@ -2,6 +2,7 @@ package GUI;
 
 import DatabaseManager.DatabaseManager;
 import Entities.Assignment;
+import Entities.Course;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,8 @@ public class DeleteAssignmentPage extends JFrame {
 
     public DeleteAssignmentPage(int courseId) {
         this.courseId = courseId;
-        List<Assignment> assignments = databaseManager.getAllAssignments();
+        Course cour = databaseManager.findCourse(courseId);
+        List<Assignment> assignments = databaseManager.getAssignmentsByCourse(cour);
         JComboBox courses = new JComboBox();
         for (Assignment a : assignments) {
             courses.addItem(a);
@@ -79,7 +81,7 @@ public class DeleteAssignmentPage extends JFrame {
 
         delete.addActionListener(e -> {
             Assignment assignmentToDelete = (Assignment) courses.getSelectedItem();
-            databaseManager.remove(assignmentToDelete);
+            databaseManager.removeAssignment(assignmentToDelete);
             JOptionPane.showMessageDialog(null,"Success!");
             dispose();
             new MainPage(courseId);

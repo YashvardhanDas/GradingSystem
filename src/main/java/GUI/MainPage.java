@@ -167,7 +167,7 @@ public class MainPage extends JFrame {
 
 
         // if there is no student in the course, get the column from Course
-        if (students == null) {
+        if (students.isEmpty()) {
             index = 0;
             for (CategoryPercent cp : course.getCategoryPercents()) {
                 String categoryName = cp.getCategory().getName();

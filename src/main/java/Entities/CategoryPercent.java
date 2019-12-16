@@ -1,6 +1,7 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,7 @@ public class CategoryPercent {
         this.percent = percent;
         this.category = category;
         this.course = course;
+        List<Assignment> assignments = new ArrayList<>();
     }
 
     public int getId() {
@@ -83,8 +85,8 @@ public class CategoryPercent {
     }
     @Override
     public boolean equals(Object obj) {
-        String categoryName = (String) obj;
-        return this.getCategory().getName()==categoryName;
+        CategoryPercent categoryName = (CategoryPercent) obj;
+        return this.getCategory().getName()==categoryName.getCategory().getName();
     }
 
 }

@@ -1,6 +1,7 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,7 @@ public class Assignment {
         this.name=name;
         this.categoryPercent = categoryPercent;
         this.totalScore = totalScore;
+        this.grades = new ArrayList<>();
     }
 
     public int getId() {

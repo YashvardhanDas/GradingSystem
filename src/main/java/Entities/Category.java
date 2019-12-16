@@ -57,7 +57,7 @@ public class Category {
 
     @Override
     public boolean equals(Object obj) {
-        String categoryName = (String) obj;
-        return this.name==categoryName;
+        Category categoryName = (Category) obj;
+        return this.name==categoryName.getName();
     }
 }

@@ -1,6 +1,7 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,8 @@ public class Course {
         this.name = name;
         this.students = students;
         this.semester = semester;
+        this.students = new ArrayList<>();
+        this.categoryPercents = new ArrayList<>();
     }
 
     public Course(String name, Semester semester) {

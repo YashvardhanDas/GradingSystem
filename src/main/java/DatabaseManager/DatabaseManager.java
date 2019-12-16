@@ -202,6 +202,15 @@ public class DatabaseManager {
         return result;
     }
 
+    public List<Assignment> getAssignmentsByCourse(Course course){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Assignment s WHERE s.categoryPercent.course = :cour");
+        q.setParameter("cour",course);
+        List<Assignment> result = (List<Assignment>) q.getResultList();
+        em.getTransaction().commit();
+        return result;
+    }
+
     public void addStudent(Student stud){
 
         for(CategoryPercent cp : stud.getCourse().getCategoryPercents()){
@@ -220,18 +229,22 @@ public class DatabaseManager {
         update(cour);
     }
 
-    public void addAssignment(Assignment assignment){
+    public void addAssignment(int id){
+        Assignment assignment = findAssignment(id);
+        Course cour = assignment.getCategoryPercent().getCourse();
         for (Student s: assignment.getCategoryPercent().getCourse().getStudents()) {
             Grades temp = new Grades(s, assignment);
+            add(temp);
             assignment.getGrades().add(temp);
+            s.getGrades().add(temp);
+            update(s);
+
         }
-        em.getTransaction().begin();
-        em.persist(assignment);
-        em.flush();
-        em.getTransaction().commit();
+        update(cour);
     }
 
     public void createCourseFromCsv(Course course, String csvPath){
+        List<Student> studentList = new ArrayList<>();
         String line = "";
         String cvsSplitBy = ",";
         Student stud=null;
@@ -250,11 +263,13 @@ public class DatabaseManager {
                         stud = new PhdStudent(student[0],student[1],student[2],student[3],course);
                         break;
                 }
-                add(stud);
+                studentList.add(stud);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        course.setStudents(studentList);
+        add(course);
     }
 
     public void createTemplate(Course course, String name){
@@ -300,6 +315,8 @@ public class DatabaseManager {
 
     public void createCourseByTemplate(Template template, String name, Semester semester){
         Course course = new Course(name,semester);
+        add(course);
+        List<CategoryPercent> categoryPercentsList = new ArrayList<>();
         String category = template.getCategories();
         String catPercent = template.getCatPercent();
         String assignNum = template.getAssignNum();
@@ -315,16 +332,24 @@ public class DatabaseManager {
         for(int i =0;i<categories.length;i++) {
             Category tempCategory = findCategoryByName(categories[i]);
             CategoryPercent tempCategoryPercent = new CategoryPercent(Double.valueOf(catPercents[i]), tempCategory, course);
+
             String[] tempAssignPercents = assignPercents[i].split(",");
             String [] tempAssignTotalScores = assignTotalScores[i].split(",");
+            ArrayList<Assignment> assignmentsList = new ArrayList<>();
             for (int j = 0; j < tempAssignPercents.length; j++) {
                 Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]), (categories[i] + j), tempCategoryPercent, Double.valueOf(tempAssignTotalScores[j]));
-                add(tempAssignment);
+                assignmentsList.add(tempAssignment);
             }
+            tempCategoryPercent.setAssignments(assignmentsList);
+            categoryPercentsList.add(tempCategoryPercent);
         }
+        course.setCategoryPercents(categoryPercentsList);
+        update(course);
     }
 
     public void createCourseByCsvAndTemplate(Course course, Template template, String csvPath){
+        add(course);
+        Course cour = findCourse(course.getId());
         String line = "";
         String cvsSplitBy = ",";
         Student stud=null;
@@ -371,14 +396,14 @@ public class DatabaseManager {
             for (int j = 0; j < tempAssignPercents.length; j++) {
                 Assignment tempAssignment = new Assignment(Double.valueOf(tempAssignPercents[j]), (categories[i] + j), tempCategoryPercent, Double.valueOf(tempAssignTotalScores[j]));
                 for(Student s:studList){
-                    gradesList.add(new Grades(s,tempAssignment));
+//                    gradesList.add(new Grades(s,tempAssignment));
+                    s.getGrades().add(new Grades(s,tempAssignment));
+
                 }
             }
         }
-
-        for(Grades g: gradesList){
-            add(g);
-        }
+        course.setStudents(studList);
+        update(course);
     }
 
     public void gradeAssignment(Grades grades, double result){
@@ -425,6 +450,22 @@ public class DatabaseManager {
         update(a);
     }
 
+    public void removeAssignment(Assignment assignment){
+        Course course = assignment.getCategoryPercent().getCourse();
+
+        for(Student s: course.getStudents()){
+            ArrayList<Grades> deletedGrades = new ArrayList<>();
+            for(Grades g:s.getGrades()){
+                if(g.getAssignment().equals(assignment)){
+                    deletedGrades.add(g);
+                }
+            }
+            s.getGrades().removeAll(deletedGrades);
+        }
+        remove(assignment);
+        update(course);
+    }
+
 //    public void addCategory(int courseId, String category){
 //        Course course = findCourse(courseId);
 //        List<Category> categories = getAllCategories();
@@ -444,11 +485,15 @@ public class DatabaseManager {
         if(course.getCategoryPercents().contains(category.getName())){
             CategoryPercent categoryPercent = findCategoryPercentByName(category.getName());
             assignment.setCategoryPercent(categoryPercent);
-            addAssignment(assignment);
+            add(assignment);
+            addAssignment( assignment.getId());
         }else{
             CategoryPercent categoryPercent = new CategoryPercent(0.0,category,course);
             assignment.setCategoryPercent(categoryPercent);
-            addAssignment(assignment);
+            add(assignment);
+            addAssignment( assignment.getId());
         }
     }
+
+
 }

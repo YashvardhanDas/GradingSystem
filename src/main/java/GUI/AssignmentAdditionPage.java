@@ -64,7 +64,7 @@ public class AssignmentAdditionPage extends JFrame {
                 for (Category c : listCatagory) {
                     category.addItem(c);
                 }
-                category.setSelectedItem(null);
+
 
 
 
@@ -110,6 +110,7 @@ public class AssignmentAdditionPage extends JFrame {
 
                 back.addActionListener(e -> {
                     dispose();
+                    new MainPage(courseID);
                 });
 
                 addCat.addActionListener(e -> {
@@ -135,7 +136,7 @@ public class AssignmentAdditionPage extends JFrame {
                     else {
                         qual = "NO Button selected";
                     }
-                    if (assignmentName.isEmpty() || assignmentScore.isEmpty() || assignmnetCatagory.equals(null)) {
+                    if (assignmentName.isEmpty() || assignmentScore.isEmpty()) {
                         JOptionPane.showMessageDialog(null,"Please fill all the blank!");
                     }
                     else {
