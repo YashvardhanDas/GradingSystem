@@ -77,6 +77,7 @@ public class DeleteAssignmentPage extends JFrame {
 
         logout.addActionListener(e -> {
             dispose();
+            new MainPage(courseId);
         });
 
         delete.addActionListener(e -> {

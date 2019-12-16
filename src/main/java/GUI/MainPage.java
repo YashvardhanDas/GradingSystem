@@ -7,6 +7,7 @@ import TableModels.MainPageTableModel;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -16,6 +17,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -378,12 +380,22 @@ public class MainPage extends JFrame {
         });
 
         export.addActionListener(e -> {
-            try {
-                databaseManager.exportToCsv(course, "C:\\Users\\Сулпак\\Desktop\\BOSTON MASTER\\Java\\test.csv");
-            } catch (IOException exception) {
-                JOptionPane.showMessageDialog(null,
-                        "Fail!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+            String path = "";
+            //int returnValue = jfc.showOpenDialog(this);
+            int returnValue = jfc.showSaveDialog(null);
+
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = jfc.getSelectedFile();
+                path = selectedFile.getAbsolutePath();
+
+                try {
+                    databaseManager.exportToCsv(course, path);
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null,
+                            "Fail to export!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
