@@ -74,17 +74,17 @@ public class AssignmentAdditionPage extends JFrame {
                 Container contentPane = getContentPane();
                 contentPane.setLayout(null);
 
-                assignmentName.setBounds(40, 50, 240, 30);
-                selectCategory.setBounds(40, 90, 240, 30);
+                assignmentName.setBounds(40, 50, 140, 30);
+                selectCategory.setBounds(40, 90, 140, 30);
                 totalScore.setBounds(40, 130, 140, 30);
                 assignmentField.setBounds(200, 50, 200, 30);
                 category.setBounds(200, 90, 200, 30);
-                addCat.setBounds(650, 90, 150, 30);
+                addCat.setBounds(450, 90, 150, 30);
                 scoreField.setBounds(200, 130, 50, 30);
                 scoringMethods.setBounds(300, 130, 150, 30);
-                percentage.setBounds(650, 130, 150, 30);
-                deduction.setBounds(650, 170, 150, 30);
-                finish.setBounds(40, 620, 140, 50);
+                percentage.setBounds(450, 130, 150, 30);
+                deduction.setBounds(450, 170, 150, 30);
+                finish.setBounds(40, 320, 140, 50);
                 back.setBounds(440, 320, 140, 50);
 
                 add(assignmentName);
@@ -102,9 +102,7 @@ public class AssignmentAdditionPage extends JFrame {
                 G.add(percentage);
                 G.add(deduction);
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//                setSize(700, 400);
-//                setLocation(200, 100);
-                setSize(1000, 650);
+                setSize(700, 400);
                 setLocation(200, 100);
                 setTitle("Assignment Addtion");
                 setResizable(false);
