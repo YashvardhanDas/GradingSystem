@@ -115,6 +115,7 @@ public class AssignmentAdditionPage extends JFrame {
 
                 addCat.addActionListener(e -> {
                     AddCategoryPage addCategoryPage = new AddCategoryPage(courseID);
+                    JOptionPane.showMessageDialog(null,"Category added!");
                 });
 
 
@@ -147,6 +148,9 @@ public class AssignmentAdditionPage extends JFrame {
                         //System.out.println("create a new assignment with name " + assignmentName + " category " + cat.getName() + " total score " + score);
                         newAssignment = new Assignment(0.0, assignmentName, null,score);
                         db.addAssignment(newAssignment, courseID, cat);
+
+                        JOptionPane.showMessageDialog(null,"Assignment added!");
+                        dispose();
                     }
 
                 });

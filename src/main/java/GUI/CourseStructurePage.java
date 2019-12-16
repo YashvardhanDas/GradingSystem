@@ -110,6 +110,7 @@ public class CourseStructurePage extends JFrame{
                 updatePer.addActionListener(e -> {
                     Double per = Double.parseDouble(percentage.getText());
                     selected.setPercent(per);
+                    JOptionPane.showMessageDialog(null,"Percentage Updated!");
 
 
                 });

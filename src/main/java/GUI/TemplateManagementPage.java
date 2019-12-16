@@ -116,13 +116,14 @@ public class TemplateManagementPage extends JFrame{
                 cancel.setBounds(450, 470, 140, 50);
 
                 addTemplate.addActionListener(e -> {
-                    String name = templateName.getText();
+                    String name = templateField.getText();
                     Course fromCourse = (Course)course.getSelectedItem();
 
                     //TODO db action here
                     db.createTemplate(fromCourse, name);
 
                     tSheet.repaint();
+                    JOptionPane.showMessageDialog(null,"Template added!");
                 });
 
                 deleteTemplate.addActionListener(e -> {
@@ -132,6 +133,7 @@ public class TemplateManagementPage extends JFrame{
                     db.remove(toDelete);
 
                     tSheet.repaint();
+                    JOptionPane.showMessageDialog(null,"Template deleted!");
                 });
 
                 cancel.addActionListener(e -> {
