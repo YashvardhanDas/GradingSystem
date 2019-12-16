@@ -126,18 +126,18 @@ public class CourseStructurePage extends JFrame{
                 });
 
 
-                category.setPreferredSize(new Dimension(350, 30));
-                percentage.setPreferredSize(new Dimension(350, 30));
+                category.setPreferredSize(new Dimension(450, 30));
+                percentage.setPreferredSize(new Dimension(450, 30));
                 Container contentPane = getContentPane();
                 contentPane.setLayout(null);
 
                 categoryLabel.setBounds(40, 50, 140,30);
                 percentageLabel.setBounds(40, 90, 140,  30);
-                category.setBounds(250, 50, 250, 30);
-                percentage.setBounds(250, 90, 250, 30);
+                category.setBounds(250, 50, 350, 30);
+                percentage.setBounds(250, 90, 350, 30);
                 if (sp != null)
-                sp.setBounds(40, 130, 500,180);
-                update.setBounds(500, 50, 140, 30);
+                sp.setBounds(40, 130, 700,180);
+                update.setBounds(800, 50, 140, 30);
                 back.setBounds(440, 320, 140, 50);
                 updatePer.setBounds(500, 90, 140, 30);
 
@@ -154,7 +154,9 @@ public class CourseStructurePage extends JFrame{
                 add(back);
                 add(updatePer);
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                setSize(700, 400);
+//                setSize(700, 400);
+//                setLocation(200, 100);
+                setSize(1000, 650);
                 setLocation(200, 100);
                 setTitle("Course Structure");
                 setResizable(false);
