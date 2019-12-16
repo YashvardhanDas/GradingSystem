@@ -93,14 +93,14 @@ public class AssignmentAdditionPage extends JFrame {
                 add(assignmentField);
                 add(category);
                 add(scoreField);
-                add(scoringMethods);
+                //add(scoringMethods);
                 add(percentage);
                 add(deduction);
                 add(finish);
                 add(back);
                 add(addCat);
-                G.add(percentage);
-                G.add(deduction);
+                //G.add(percentage);
+                //G.add(deduction);
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 setSize(700, 400);
                 setLocation(200, 100);
@@ -110,7 +110,7 @@ public class AssignmentAdditionPage extends JFrame {
 
                 back.addActionListener(e -> {
                     dispose();
-                    new MainPage(courseID);
+                    MainPage mainPage = new MainPage(courseID);
                 });
 
                 addCat.addActionListener(e -> {
@@ -151,6 +151,7 @@ public class AssignmentAdditionPage extends JFrame {
 
                         JOptionPane.showMessageDialog(null,"Assignment added!");
                         dispose();
+                        MainPage mainPage = new MainPage(courseID);
                     }
 
                 });

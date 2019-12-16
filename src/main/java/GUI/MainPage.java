@@ -355,6 +355,7 @@ public class MainPage extends JFrame {
 
         addAssignment.addActionListener(e -> {
             AssignmentAdditionPage assignmentAdditionPage = new AssignmentAdditionPage(courseId);
+            dispose();
         });
 
         curve.addActionListener(e -> {
