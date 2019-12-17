@@ -117,6 +117,17 @@ public class DatabaseManager {
 
         return result;
     }
+
+    public List<CategoryPercent> findCategoryPercentByCourse(Course course){
+        ArrayList<CategoryPercent> result = null;
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM CategoryPercent s WHERE s.course = :n");
+        q.setParameter("n",course);
+        result = (ArrayList<CategoryPercent>) q.getResultList();
+        em.getTransaction().commit();
+
+        return result;
+    }
     public CategoryPercent findCategoryPercentByName(String name, Course course){
         CategoryPercent result = null;
         em.getTransaction().begin();
