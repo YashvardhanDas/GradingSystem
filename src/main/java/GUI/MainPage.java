@@ -76,8 +76,8 @@ public class MainPage extends JFrame {
 //        for (CategoryPercent cp : course.getCategoryPercents()) {
 //            categoriesBox.addItem(cp.getCategory().getName());
 //        }
-        for (Category cp : databaseManager.getAllCategories()) {
-            categoriesBox.addItem(cp.getName());
+        for (CategoryPercent cp : databaseManager.findCategoryPercentByCourse(course)) {
+            categoriesBox.addItem(cp.getCategory().getName());
         }
         categoriesBox.repaint();
 

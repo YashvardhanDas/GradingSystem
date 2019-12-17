@@ -119,11 +119,11 @@ public class DatabaseManager {
     }
 
     public List<CategoryPercent> findCategoryPercentByCourse(Course course){
-        ArrayList<CategoryPercent> result = null;
+        List<CategoryPercent> result = null;
         em.getTransaction().begin();
         Query q = em.createQuery("SELECT s FROM CategoryPercent s WHERE s.course = :n");
         q.setParameter("n",course);
-        result = (ArrayList<CategoryPercent>) q.getResultList();
+        result = (List<CategoryPercent>) q.getResultList();
         em.getTransaction().commit();
 
         return result;
