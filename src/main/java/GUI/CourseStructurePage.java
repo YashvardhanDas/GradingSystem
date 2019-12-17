@@ -144,6 +144,7 @@ public class CourseStructurePage extends JFrame{
 
                 back.addActionListener(e -> {
                     dispose();
+                    new MainPage(courseID);
                 });
 
                 add(categoryLabel);

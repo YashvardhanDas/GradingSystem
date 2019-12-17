@@ -73,9 +73,13 @@ public class MainPage extends JFrame {
 
         categoriesBox = new JComboBox();
         categoriesBox.addItem("All");
-        for (CategoryPercent cp : course.getCategoryPercents()) {
-            categoriesBox.addItem(cp.getCategory().getName());
+//        for (CategoryPercent cp : course.getCategoryPercents()) {
+//            categoriesBox.addItem(cp.getCategory().getName());
+//        }
+        for (Category cp : databaseManager.getAllCategories()) {
+            categoriesBox.addItem(cp.getName());
         }
+        categoriesBox.repaint();
 
         notGradedBox = new JCheckBox("Not Graded");
 
@@ -351,6 +355,7 @@ public class MainPage extends JFrame {
 
         courseStructure.addActionListener(e -> {
             CourseStructurePage courseStructurePage = new CourseStructurePage(courseId, null);
+            dispose();
         });
 
         addAssignment.addActionListener(e -> {

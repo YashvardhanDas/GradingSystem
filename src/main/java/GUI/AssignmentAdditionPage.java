@@ -115,7 +115,8 @@ public class AssignmentAdditionPage extends JFrame {
 
                 addCat.addActionListener(e -> {
                     AddCategoryPage addCategoryPage = new AddCategoryPage(courseID);
-                    JOptionPane.showMessageDialog(null,"Category added!");
+                    dispose();
+                    //JOptionPane.showMessageDialog(null,"Category added!");
                 });
 
 

@@ -63,6 +63,7 @@ public class AddCategoryPage extends JFrame{
 
                 back.addActionListener(e -> {
                     dispose();
+                    new AssignmentAdditionPage(CourseID);
                 });
 
                 updatePer.addActionListener(e -> {
@@ -85,6 +86,10 @@ public class AddCategoryPage extends JFrame{
                         Category newCat = new Category(s);
                         db.add(newCat);
                     }
+
+                    JOptionPane.showMessageDialog(null,"Category added!");
+                    dispose();
+                    new AssignmentAdditionPage(CourseID);
 
 
 
