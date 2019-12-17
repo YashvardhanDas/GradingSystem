@@ -94,8 +94,8 @@ public class AssignmentAdditionPage extends JFrame {
                 add(category);
                 add(scoreField);
                 //add(scoringMethods);
-                add(percentage);
-                add(deduction);
+//                add(percentage);
+//                add(deduction);
                 add(finish);
                 add(back);
                 add(addCat);

@@ -117,11 +117,11 @@ public class DatabaseManager {
 
         return result;
     }
-    public CategoryPercent findCategoryPercentByName(String name){
+    public CategoryPercent findCategoryPercentByName(String name, Course course){
         CategoryPercent result = null;
         em.getTransaction().begin();
-        Query q = em.createQuery("SELECT s FROM CategoryPercent s WHERE s.category.name = :n");
-        q.setParameter("n",name);
+        Query q = em.createQuery("SELECT s FROM CategoryPercent s WHERE s.category.name = :n AND s.course = :cour");
+        q.setParameter("n",name).setParameter("cour",course);
         result = (CategoryPercent) q.getSingleResult();
         em.getTransaction().commit();
 
@@ -229,18 +229,20 @@ public class DatabaseManager {
         update(cour);
     }
 
-    public void addAssignment(int id){
+    public void addAssignment(int id , Course course){
         Assignment assignment = findAssignment(id);
-        Course cour = assignment.getCategoryPercent().getCourse();
-        for (Student s: assignment.getCategoryPercent().getCourse().getStudents()) {
+        em.getTransaction().begin();
+        em.merge(course);
+        em.getTransaction().commit();
+        for (Student s: course.getStudents()) {
             Grades temp = new Grades(s, assignment);
-            add(temp);
             assignment.getGrades().add(temp);
             s.getGrades().add(temp);
             update(s);
+            update(assignment);
 
         }
-        update(cour);
+        update(course);
     }
 
     public void createCourseFromCsv(Course course, String csvPath){
@@ -463,6 +465,10 @@ public class DatabaseManager {
             s.getGrades().removeAll(deletedGrades);
         }
         remove(assignment);
+        assignment.getCategoryPercent().getAssignments().remove(assignment);
+        if(assignment.getCategoryPercent().getAssignments().isEmpty()){
+            remove(assignment.getCategoryPercent());
+        }
         update(course);
     }
 
@@ -482,16 +488,25 @@ public class DatabaseManager {
 
     public void addAssignment(Assignment assignment, int courseId,Category category){
         Course course = findCourse(courseId);
-        if(course.getCategoryPercents().contains(category.getName())){
-            CategoryPercent categoryPercent = findCategoryPercentByName(category.getName());
+        em.getTransaction().begin();
+        em.merge(category);
+        em.getTransaction().commit();
+        CategoryPercent temp = new CategoryPercent(0.0,category,course);
+        if(course.getCategoryPercents().contains(temp)){
+            System.out.println("1!!!!!!!!!");
+            CategoryPercent categoryPercent = findCategoryPercentByName(category.getName(),course);
             assignment.setCategoryPercent(categoryPercent);
+            categoryPercent.getAssignments().add(assignment);
+            update(categoryPercent);
             add(assignment);
-            addAssignment( assignment.getId());
+            addAssignment( assignment.getId(), course);
+
         }else{
+            System.out.println("2!!!!!!!!!!!!!!");
             CategoryPercent categoryPercent = new CategoryPercent(0.0,category,course);
             assignment.setCategoryPercent(categoryPercent);
             add(assignment);
-            addAssignment( assignment.getId());
+            addAssignment( assignment.getId(),course);
         }
     }
 
